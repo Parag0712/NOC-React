@@ -1,8 +1,6 @@
-import LoginView from "src/sections/Register/register-view";
+import { LoginView } from 'src/sections/Login';
 
 
-
-// ----------------------------------------------------------------------
 
 export default function LoginPage() {
   return (

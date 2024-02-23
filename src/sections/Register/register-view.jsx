@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -15,7 +16,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { bgGradient } from 'src/theme/css';
 
-import Logo from 'src/components/logo';
+// import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -39,13 +40,13 @@ export default function LoginView() {
         height: 1,
       }}
     >
-      <Logo
+      {/* <Logo
         sx={{
           position: 'fixed',
           top: { xs: 16, md: 24 },
           left: { xs: 16, md: 24 },
         }}
-      />
+      /> */}
 
       <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
         <Card
@@ -59,7 +60,7 @@ export default function LoginView() {
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
             have an account?
-            <Link href="/login" variant="subtitle2" sx={{ ml: 0.5 }}>
+            <Link to="/login" variant="subtitle2" sx={{ ml: 0.5 }}>
               Login
             </Link>
           </Typography>

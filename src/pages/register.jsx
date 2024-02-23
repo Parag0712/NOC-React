@@ -1,4 +1,3 @@
-
 import { RegisterView } from 'src/sections/Register';
 
 // ----------------------------------------------------------------------
