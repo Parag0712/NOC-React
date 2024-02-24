@@ -1,3 +1,6 @@
+import { motion } from 'framer-motion';
+import { useForm } from 'react-hook-form';
+
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
@@ -6,17 +9,19 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Stack, Button, MenuItem, TextField } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
+
 export default function appForm() {
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
+    const handleCertificate = () => {
     }
 
     return (
         <Container maxWidth="xl">
             {/* <Typography variant="h4">Application Form</Typography> */}
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(handleCertificate)}>
 
                 <Grid container spacing={3}>
                     <Grid item xs={10} md={10} lg={11} sx={{ margin: "auto" }}>
@@ -24,22 +29,132 @@ export default function appForm() {
 
                             <Stack sx={{ gap: "10px" }} direction={{ sm: "row", xs: "colum", lg: "row" }}>
 
-
-                                <TextField type='email' name="student_email" fullWidth label="Student Email address" />
-                                <TextField type='tel' name="student_phoneNo" fullWidth label="Student Phone Number"
+                                {/* Email */}
+                                <TextField
+                                    sx={{ marginBottom: '10px' }}
+                                    name="email"
+                                    label="Email address"
+                                    fullWidth
+                                    error={!!errors.email}
+                                    helperText={
+                                        <motion.div
+                                            style={{
+                                                color: 'red',
+                                                opacity: errors.email ? 1 : 0,
+                                                transition: "opacity 0.3s ease-in-out",
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            {errors.email && errors.email.message}
+                                        </motion.div>
+                                    }
+                                    {...register("email", {
+                                        required: '*Email is required',
+                                        pattern: {
+                                            value: /^[a-zA-Z0-9._%+-]+@(charusat\.edu\.in|charusat\.ac\.in)$/,
+                                            message: '*InValid Email. ex. [@charusat.edu.in, @charusat.ac.in]'
+                                        }
+                                    })}
                                 />
+
+
+
+                                {/* Phone No */}
+                                <TextField
+                                    sx={{ marginBottom: '10px' }}
+                                    name="student_phoneNo"
+                                    label="Student Phone Number"
+                                    error={!!errors.student_phoneNo}
+                                    fullWidth
+                                    helperText={
+                                        <motion.div
+                                            style={{
+                                                color: 'red',
+                                                opacity: errors.student_phoneNo ? 1 : 0,
+                                                transition: "opacity 0.3s ease-in-out",
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            {errors.student_phoneNo && errors.student_phoneNo.message}
+                                        </motion.div>
+                                    }
+                                    {...register("student_phoneNo", {
+                                        required: '*Stundet Number is required',
+                                        pattern: {
+                                            value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+                                            message: '*Student Number must be at least 10 characters long'
+                                        }
+                                    })}
+                                />
+
                             </Stack>
                             <Stack sx={{ gap: "10px" }} direction={{ sm: "row", xs: "column", lg: "row" }}>
-                                <TextField type='text' name="student_id" fullWidth label="Student Roll No" />
-                                <TextField type='text' name="student_name" fullWidth label="Student Name" />
+
+                                {/* Student RollNo */}
+                                <TextField
+                                    sx={{ marginBottom: '10px' }}
+                                    name="student_id"
+                                    label="Student Roll No"
+                                    error={!!errors.student_id}
+                                    fullWidth
+                                    helperText={
+                                        <motion.div
+                                            style={{
+                                                color: 'red',
+                                                opacity: errors.student_id ? 1 : 0,
+                                                transition: "opacity 0.3s ease-in-out",
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            {errors.student_id && errors.student_id.message}
+                                        </motion.div>
+                                    }
+                                    {...register("student_id", {
+                                        required: '*Student RollNo is required. ',
+                                        pattern: {
+                                            value: /^[a-zA-Z0-9]+$/,
+                                            message: '*Student RollNo ex. [D12DCS12,22DCS21]'
+                                        }
+                                    })}
+                                />
+
+                                {/* Student Name */}
+                                <TextField
+                                    sx={{ marginBottom: '10px' }}
+                                    name="student_name"
+                                    label="Student Name"
+                                    error={!!errors.student_name}
+                                    fullWidth
+                                    helperText={
+                                        <motion.div
+                                            style={{
+                                                color: 'red',
+                                                opacity: errors.student_name ? 1 : 0,
+                                                transition: "opacity 0.3s ease-in-out",
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            {errors.student_name && errors.student_name.message}
+                                        </motion.div>
+                                    }
+                                    {...register("student_name", {
+                                        required: '*Stundet Name is required.',
+                                        pattern: {
+                                            value: /^[a-zA-Z\s]*$/,                                            message: '*Enter a valid Student Name'
+                                        }
+                                    })}
+                                />
+
+                                {/* Semester */}
                                 <TextField
                                     id="outlined-select-currency"
                                     select
                                     fullWidth
-                                    label="Select"
+                                    label="Semester"
                                     defaultValue="2"
                                     helperText="Semester"
                                     name='student_sem'
+                                    {...register("student_sem")}
                                 >
                                     <MenuItem value="2">2</MenuItem>
                                     <MenuItem value="4">4</MenuItem>
@@ -49,7 +164,6 @@ export default function appForm() {
                             </Stack>
 
                             {/* College */}
-
                             <Typography variant="h6">College Details</Typography>
                             <Stack sx={{ gap: "10px" }} direction={{ sm: "row", xs: "colum", lg: "row" }}>
 
@@ -61,6 +175,7 @@ export default function appForm() {
                                     defaultValue="2"
                                     helperText="College"
                                     name='college_name'
+                                    {...register("college_name")}
                                 >
                                     <MenuItem value="2">2</MenuItem>
                                 </TextField>
@@ -72,6 +187,7 @@ export default function appForm() {
                                     defaultValue="2"
                                     name='college_branch'
                                     helperText="Branch"
+                                    {...register("college_branch")}
                                 >
                                     <MenuItem value="2">2</MenuItem>
                                 </TextField>
@@ -101,13 +217,17 @@ export default function appForm() {
                             <Typography variant="h6">Inetrship Details</Typography>
                             <Stack sx={{ gap: "10px" }} direction={{ sm: "row", xs: "column", lg: "row" }}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker sx={{ width: "100%" }} label="Start Date" />
+                                    <DatePicker sx={{ width: "100%" }} label="Start Date" 
+                                    {...register("internship_starting_date")}/>
                                 </LocalizationProvider>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker sx={{ width: "100%" }} label="End Date" />
+                                    <DatePicker sx={{ width: "100%" }} label="End Date" 
+                                    {...register("internship_ending_date")}/>
+                                    
+                                    
                                 </LocalizationProvider>
                             </Stack>
-                        </Stack> <Button fullWidth sx={{ marginTop: "40px", padding: "10px" }} variant="contained">Send Application</Button>
+                        </Stack> <Button type="submit" fullWidth sx={{ marginTop: "40px", padding: "10px" }} variant="contained">Send Application</Button>
                     </Grid>
                 </Grid>
             </form>

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -13,11 +13,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 
-// import { useRouter } from 'src/routes/hooks';
-
 import { bgGradient } from 'src/theme/css';
 
-// import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -34,7 +31,6 @@ export default function UpdateProfile() {
         console.log(data);
     };
 
-    const fileInputRef = useRef(null);
 
 
     const imageChange = (e) => {
@@ -69,14 +65,17 @@ export default function UpdateProfile() {
 
                     <form onSubmit={handleSubmit(handleUpdate)}>
                         <Stack spacing={3} >
-                            <Stack alignItems="center">
-                                <Avatar sx={{ margin: "auto", width: 70, height: 70,cursor:"pointer" }} onClick={() => {
-                                    fileInputRef.current.click();
-                                }} />
-                                <input type='file' ref={fileInputRef} id='fileInput' hidden
+                            <Stack alignItems="center" >
+
+                                <label htmlFor="fileInput">
+                                    <Avatar
+                                        sx={{ margin: "auto", width: 70, height: 70, cursor: "pointer" }}
+                                    />
+                                </label>
+                                <input type='file' id='fileInput' hidden
                                     onChange={imageChange}
                                     {
-                                        ...register("profileImage")
+                                    ...register("profileImage")
                                     }
                                 />
                             </Stack>
