@@ -126,8 +126,6 @@ export default function RegisterView() {
                     message: "(e.g. id@charusat.edu.in, id@charusat.ac.in)"
                   }
                 })}
-
-
               />
 
               <TextField

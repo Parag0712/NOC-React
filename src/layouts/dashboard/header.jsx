@@ -60,7 +60,7 @@ export default function Header({ onOpenNav }) {
           </IconButton>
         )}
 
-        <Stack direction="row" alignItems="center" sx={{ marginLeft: "30px" }} spacing={1}>
+        <Stack direction="row" alignItems="center"  spacing={1}>
           <Typography variant="h4" sx={{ mb: 5, color: "black", textAlign: "center" }}>
             Noc Certificate Generator
           </Typography>

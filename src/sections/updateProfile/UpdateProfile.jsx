@@ -24,19 +24,38 @@ export default function UpdateProfile() {
     // const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
 
-
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [avatarSrc, setAvatarSrc] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
+    const { register, handleSubmit,setValue, formState: { errors } } = useForm();
 
     const handleUpdate = (data) => {
         console.log(data);
     };
 
-
-
+    // imageChange
     const imageChange = (e) => {
         const selectedFile = e.target.files[0];
-        console.log(selectedFile);
-    }
+        if (selectedFile) {
+            if (selectedFile.size > 5 * 1024 * 1024) {
+                setErrorMessage('File size exceeds 5MB.');
+                return;
+            }
+
+            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!validImageTypes.includes(selectedFile.type)) {
+                setErrorMessage('Please select a JPEG, PNG, or GIF image.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                setAvatarSrc(reader.result);
+                setValue('profileImage', selectedFile); 
+                setErrorMessage('');
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    };
 
     return (
         <Box
@@ -66,17 +85,16 @@ export default function UpdateProfile() {
                     <form onSubmit={handleSubmit(handleUpdate)}>
                         <Stack spacing={3} >
                             <Stack alignItems="center" >
-
                                 <label htmlFor="fileInput">
                                     <Avatar
+                                        src={avatarSrc}
                                         sx={{ margin: "auto", width: 70, height: 70, cursor: "pointer" }}
                                     />
                                 </label>
+
+                                {errorMessage && <p style={{ color: 'red', textAlign: "center" }}>{errorMessage}</p>}
                                 <input type='file' id='fileInput' hidden
                                     onChange={imageChange}
-                                    {
-                                    ...register("profileImage")
-                                    }
                                 />
                             </Stack>
 
