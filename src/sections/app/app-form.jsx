@@ -18,15 +18,17 @@ export default function appForm() {
     // Handle Certificate
     const handleCertificate = (data) => {
         console.log(data);
-        // const dayjsDate = data.internship_starting_date;
-        // const jsDate = dayjsDate?.toDate();
-        // const dateString = jsDate?.toLocaleDateString(undefined, {
-        //     year: 'numeric',
-        //     month: '2-digit',
-        //     day: '2-digit'
-        // });
-
+        console.log(data.student_email);
+        const dayjsDate = data.internship_starting_date;
+        const jsDate = dayjsDate?.toDate();
+        const dateString = jsDate?.toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+        console.log(dateString);
     }
+
     const colleges = [
         { name: "CSPIT", branch: ["CE", "IT"] },
         { name: "DESTAR", branch: ["CSE", "CE", "IT"] }
@@ -392,7 +394,7 @@ export default function appForm() {
                                         <Controller
                                             name="internship_starting_date"
                                             control={control}
-                                            
+
                                             rules={{ required: 'Start Date is required' }}
                                             render={({ field }) => (
                                                 <DatePicker
