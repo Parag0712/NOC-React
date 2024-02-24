@@ -1,4 +1,6 @@
-import { useRef,useState } from 'react';
+import { motion } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -24,12 +26,18 @@ export default function UpdateProfile() {
     const theme = useTheme();
     // const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
-    const fileInputRef = useRef(null);
-    const handleClick = (e) => {
-        e.preventDefault();
+
+
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
+    const handleUpdate = (data) => {
+        console.log(data);
     };
 
-    const imageChange = (e)=>{
+    const fileInputRef = useRef(null);
+
+
+    const imageChange = (e) => {
         const selectedFile = e.target.files[0];
         console.log(selectedFile);
     }
@@ -59,25 +67,92 @@ export default function UpdateProfile() {
                 >
                     <Typography variant="h4">Update Profile</Typography>
 
-                    <form onSubmit={handleClick}>
+                    <form onSubmit={handleSubmit(handleUpdate)}>
                         <Stack spacing={3} >
                             <Stack alignItems="center">
-                                    <Avatar  sx={{ margin: "auto", width: 70, height: 70 }} onClick={()=>{
-                                           fileInputRef.current.click();
-                                    }}/>
-                                <input type='file' ref={fileInputRef} id='fileInput' hidden 
-                            onChange={imageChange}
-                            />
+                                <Avatar sx={{ margin: "auto", width: 70, height: 70,cursor:"pointer" }} onClick={() => {
+                                    fileInputRef.current.click();
+                                }} />
+                                <input type='file' ref={fileInputRef} id='fileInput' hidden
+                                    onChange={imageChange}
+                                    {
+                                        ...register("profileImage")
+                                    }
+                                />
                             </Stack>
 
-                            
-                            <TextField name="text" label="First Name" />
-                            <TextField name="text" label="Second Name" />
-                           
+                            <TextField
+                                type='text'
+                                name="firstName"
+                                fullWidth
+                                label="First Name"
+                                error={errors.firstName}
+                                helperText={
+                                    <motion.div
+                                        style={{
+                                            color: 'red',
+                                            opacity: errors.firstName ? 1 : 0,
+                                            transition: "opacity 0.3s ease-in-out",
+                                            fontWeight: "bold"
+                                        }}
+                                    >
+                                        {errors.firstName && errors.firstName.message}
+                                    </motion.div>
+                                }
+                                {...register("firstName", {
+                                    required: "First name is required",
+                                    pattern: {
+                                        value: /^[a-zA-Z\s]*$/,
+                                        message: "Enter a valid first name"
+                                    }
+                                })}
+                            />
+
+                            {/* lastName */}
+                            <TextField
+                                type='text'
+                                name="lastName"
+                                fullWidth
+                                label="Last Name"
+                                error={errors.lastName}
+                                helperText={
+                                    <motion.div
+                                        style={{
+                                            color: 'red',
+                                            opacity: errors.lastName ? 1 : 0,
+                                            transition: "opacity 0.3s ease-in-out",
+                                            fontWeight: "bold"
+                                        }}
+                                    >
+                                        {errors.lastName && errors.lastName.message}
+                                    </motion.div>
+                                }
+                                {...register("lastName", {
+                                    required: "Last name is required",
+                                    pattern: {
+                                        value: /^[a-zA-Z\s]*$/,
+                                        message: "Enter a valid last name"
+                                    }
+                                })}
+                            />
+
                             <TextField
                                 name="password"
                                 label="Password"
                                 type={showPassword ? 'text' : 'password'}
+                                error={!!errors.password}
+                                helperText={
+                                    <motion.div
+                                        style={{
+                                            color: 'red',
+                                            opacity: errors.password ? 1 : 0,
+                                            transition: "opacity 0.3s ease-in-out",
+                                            fontWeight: "bold"
+                                        }}
+                                    >
+                                        {errors.password && errors.password.message}
+                                    </motion.div>
+                                }
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
@@ -87,6 +162,13 @@ export default function UpdateProfile() {
                                         </InputAdornment>
                                     ),
                                 }}
+                                {...register("password", {
+                                    required: '*Password is required',
+                                    minLength: {
+                                        value: 6,
+                                        message: '*Password must be at least 6 characters long'
+                                    }
+                                })}
                             />
                         </Stack>
 
@@ -96,7 +178,7 @@ export default function UpdateProfile() {
                             type="submit"
                             variant="contained"
                             color="inherit"
-                            sx={{marginTop:"20px"}}
+                            sx={{ marginTop: "20px" }}
                         >
                             Update Profile
                         </LoadingButton>
