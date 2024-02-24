@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
-// import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -12,22 +13,17 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 
-// import { useRouter } from 'src/routes/hooks';
-
 import { bgGradient } from 'src/theme/css';
 
-// import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 
-// ----------------------------------------------------------------------
-
-export default function LoginView() {
+export default function RegisterView() {
   const theme = useTheme();
-  // const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const handleClick = (e) => {
-    e.preventDefault();
+  const handleRegister = (data) => {
+    console.log(data);
   };
 
   return (
@@ -40,45 +36,117 @@ export default function LoginView() {
         height: 1,
       }}
     >
-      {/* <Logo
-        sx={{
-          position: 'fixed',
-          top: { xs: 16, md: 24 },
-          left: { xs: 16, md: 24 },
-        }}
-      /> */}
-
       <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-        <Card
-          sx={{
-            p: 5,
-            width: 1,
-            maxWidth: 420,
-          }}
-        >
-          <Typography variant="h4">Sign up </Typography>
+        <Card sx={{ p: 5, width: 1, maxWidth: 420 }}>
+          <Typography variant="h4">Sign up</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            have an account?
+            Already have an account?
             <Link to="/login" variant="subtitle2" sx={{ ml: 0.5 }}>
               Login
             </Link>
           </Typography>
-          <form onSubmit={handleClick}>
+          <form onSubmit={handleSubmit(handleRegister)}>
             <Stack spacing={3}>
-
               <Stack sx={{ gap: "10px" }} direction={{ sm: "row", xs: "column", lg: "row" }}>
-                <TextField type='text' name="First" fullWidth label="First Name" />
-                <TextField type='text' name="Last" fullWidth label="Last Name" />
+                <TextField
+                  type='text'
+                  name="firstName"
+                  fullWidth
+                  label="First Name"
+                  error={errors.firstName}
+                  helperText={
+                    <motion.div
+                      style={{
+                        color: 'red',
+                        opacity: errors.firstName ? 1 : 0,
+                        transition: "opacity 0.3s ease-in-out",
+                        fontWeight: "bold"
+                      }}
+                    >
+                      {errors.firstName && errors.firstName.message}
+                    </motion.div>
+                  }
+                  {...register("firstName", {
+                    required: "First name is required",
+                    pattern: {
+                      value: /^[a-zA-Z\s]*$/,
+                      message: "Enter a valid first name"
+                    }
+                  })}
+                />
+                <TextField
+                  type='text'
+                  name="lastName"
+                  fullWidth
+                  label="Last Name"
+                  error={errors.lastName}
+                  helperText={
+                    <motion.div
+                      style={{
+                        color: 'red',
+                        opacity: errors.lastName ? 1 : 0,
+                        transition: "opacity 0.3s ease-in-out",
+                        fontWeight: "bold"
+                      }}
+                    >
+                      {errors.lastName && errors.lastName.message}
+                    </motion.div>
+                  }
+                  {...register("lastName", {
+                    required: "Last name is required",
+                    pattern: {
+                      value: /^[a-zA-Z\s]*$/,
+                      message: "Enter a valid last name"
+                    }
+                  })}
+                />
               </Stack>
 
-              <TextField name="email" label="Email address" />
+              <TextField
+                name="email"
+                label="Email address"
+                error={errors.email}
+                helperText={
+                  <motion.div
+                    style={{
+                      color: 'red',
+                      opacity: errors.email ? 1 : 0,
+                      transition: "opacity 0.3s ease-in-out",
+                      fontWeight: "bold"
+                    }}
+                  >
+                    {errors.email ? errors.email.message : ''}
+                  </motion.div>
+                }
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@(charusat\.edu\.in|charusat\.ac\.in)$/,
+                    message: "(e.g. id@charusat.edu.in, id@charusat.ac.in)"
+                  }
+                })}
 
+
+              />
 
               <TextField
                 name="password"
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
+                error={errors.password}
+                helperText={
+                  <motion.div
+                    style={{
+                      color: 'red',
+                      opacity: errors.password ? 1 : 0,
+                      transition: "opacity 0.3s ease-in-out",
+                      fontWeight: "bold"
+                    }}
+                  >
+                    {errors.password && errors.password.message}
+                  </motion.div>
+                }
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -88,9 +156,15 @@ export default function LoginView() {
                     </InputAdornment>
                   ),
                 }}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters long"
+                  }
+                })}
               />
             </Stack>
-
 
             <LoadingButton
               sx={{ mt: 3 }}

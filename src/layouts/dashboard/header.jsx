@@ -8,8 +8,9 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgBlur } from 'src/theme/css';
 
-import { NAV, HEADER } from './config-layout';
 import Iconify from 'src/components/iconify';
+
+import { NAV, HEADER } from './config-layout';
 
 // ----------------------------------------------------------------------
 

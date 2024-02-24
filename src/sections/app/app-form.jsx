@@ -14,11 +14,12 @@ export default function appForm() {
 
     return (
         <Container maxWidth="xl">
-            
+            {/* <Typography variant="h4">Application Form</Typography> */}
+
             <form onSubmit={handleSubmit}>
 
                 <Grid container spacing={3}>
-                    <Grid item xs={10} md={10} lg={10} sx={{ margin: "auto" }}>
+                    <Grid item xs={10} md={10} lg={11} sx={{ margin: "auto" }}>
                         <Stack spacing={{ xs: 0, lg: 3 }} sx={{ gap: "20px" }} direction={{ xs: 'column', lg: 'colum' }}>
 
                             <Stack sx={{ gap: "10px" }} direction={{ sm: "row", xs: "colum", lg: "row" }}>
@@ -106,7 +107,7 @@ export default function appForm() {
                                     <DatePicker sx={{ width: "100%" }} label="End Date" />
                                 </LocalizationProvider>
                             </Stack>
-                        </Stack> <Button fullWidth sx={{ marginTop: "10px", padding: "10px" }} variant="contained">Send Request</Button>
+                        </Stack> <Button fullWidth sx={{ marginTop: "40px", padding: "10px" }} variant="contained">Send Application</Button>
                     </Grid>
                 </Grid>
             </form>
