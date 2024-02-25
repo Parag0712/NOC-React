@@ -26,14 +26,10 @@ export default function App() {
     if (token && !userDataFetched) {
       AuthService.getAuthUser(token)
         .then((val) => {
-          console.log(val);
           const refreshToken = val.data.tokens.refreshToken;
           const accessToken = val.data.tokens.accessToken;
           dispatch(setToken({accessToken,refreshToken}));
           const userData = { ...val.data.user, refreshToken, accessToken };
-          console.log(userData);
-          console.log("sda");
-          toast.success("sa")
           dispatch(signInSuccess(userData));
           setUserDataFetched(true); // Mark user data as fetched
         })

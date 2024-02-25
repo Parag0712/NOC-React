@@ -246,7 +246,7 @@ export default function UpdateProfile() {
                         </LoadingButton>
 
                         <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ mt: 2}}>
-                            <Link to={'/forgetpassword'} variant="subtitle2"  underline="hover" style={{color:"#212b36"}}>
+                            <Link to={'/changepassword'} variant="subtitle2"  underline="hover" style={{color:"#212b36"}}>
                                 Change password?
                             </Link>
                         </Stack>

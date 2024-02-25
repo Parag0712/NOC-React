@@ -14,6 +14,9 @@ import IconButton from '@mui/material/IconButton';
 import Iconify from 'src/components/iconify';
 import { bgGradient } from 'src/theme/css';
 import { useSelector } from 'react-redux';
+import AuthService from 'src/backend/AuthService';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -29,8 +32,17 @@ export default function ChangePassword() {
     } = useForm();
     const newPassword = watch('newPassword');
     const {token} = useSelector((state)=>state.user);
-    const handleChangePassword = () => {
-        
+    const navigate = useNavigate();
+
+    // handleChangedPassword
+    const handleChangePassword = (data) => {
+        AuthService.changePassword(data.password,data.newPassword,token?.accessToken)
+        .then((val)=>{
+            navigate('/')
+            toast.success(val.message)
+        }).catch((error)=>{
+            toast.error(error)
+        })
     };
 
     return (
@@ -58,6 +70,44 @@ export default function ChangePassword() {
 
                     <form onSubmit={handleSubmit(handleChangePassword)}>
                         <Stack spacing={3}>
+
+{                       /* password */}
+                        <TextField
+                                name="password"
+                                label="Password"
+                                type={showPassword ? 'text' : 'password'}
+                                error={!!errors.password}
+                                helperText={
+                                    <motion.div
+                                        style={{
+                                            color: 'red',
+                                            opacity: errors.password ? 1 : 0,
+                                            transition: "opacity 0.3s ease-in-out",
+                                            fontWeight: "bold"
+                                        }}
+                                    >
+                                        {errors.password && errors.password.message}
+                                    </motion.div>
+                                }
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                                                <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                                {...register("password", {
+                                    required: '*Password is required',
+                                    minLength: {
+                                        value: 6,
+                                        message: '*Password must be at least 6 characters long'
+                                    }
+                                })}
+                            />
+
+                            {/* new password */}
                             <TextField
                                 name="newPassword"
                                 label="New Password"

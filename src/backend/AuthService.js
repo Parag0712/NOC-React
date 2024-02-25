@@ -55,67 +55,7 @@ class Auth {
         }
     }
 
-    //Get Current User
-    async getAuthUser(token) {
-        console.log(token);
-        try {
-            const response = await this.api.get('users/getCurrentUser', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            console.log(response.data);
-            return response.data;
-        } catch (error) {
-            if (error.response.data) {
-                throw error.response.data.message;
-            } else {
-                throw error
-            }
-        }
-    }
-
-
-    // Logout Function
-    async logout(token) {
-
-        console.log(token);
-        try {
-            const response = await this.api.post("users/logout", null,{
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            return response.data
-        } catch (error) {
-            if (error.response.data) {
-                throw error.response.data.message;
-            } else {
-                throw error
-            }
-        }
-    }
-
-
-
-    async refreshToken(id) {
-        // console.log(id);
-        try {
-            const response = await this.api.get('auth/refresh-token', {
-                params: {
-                    param1: id,
-                }
-            });
-            return response.data;
-        } catch (error) {
-            if (error.response.data) {
-                throw error.response.data.message;
-            } else {
-                throw error
-            }
-        }
-    }
-
+    // updateAccount
     async updateAccount({ lastName, firstName, password, profileImage }, token) {
         try {
             const formData = new FormData();
@@ -143,6 +83,86 @@ class Auth {
         }
     }
 
+    //Get Current User
+    async getAuthUser(token) {
+        console.log(token);
+        try {
+            const response = await this.api.get('users/getCurrentUser', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
+    // ChangePassword
+    async changePassword(password, newPassword , token) {
+        try {
+            const response = await this.api.patch('users/changePassword', {
+                password,
+                newPassword
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            return response.data;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
+
+    // Logout Function
+    async logout(token) {
+        console.log(token);
+        try {
+            const response = await this.api.post("users/logout", null, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
+
+    async refreshToken(id) {
+        // console.log(id);
+        try {
+            const response = await this.api.get('auth/refresh-token', {
+                params: {
+                    param1: id,
+                }
+            });
+            return response.data;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
 
     async googleAuth({ username, email, avatar }) {
         try {
