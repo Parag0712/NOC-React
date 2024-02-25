@@ -52,7 +52,6 @@ export default function UpdateProfile() {
         AuthService.updateAccount(data, token?.accessToken).then((value) => {
             console.log(value);
             const userData = { ...value.data.updatedUser };
-            console.log(userData);
             dispatch(updateUserSuccess(userData));
             toast.success(value.message)
         }).catch((error) => {

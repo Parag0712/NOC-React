@@ -11,17 +11,20 @@ import { useEffect, useState } from 'react';
 import AuthService from './backend/AuthService';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken, signInFailure, signInSuccess } from './redux/User/userSlice';
-
+import { addCertificate, addCertificates } from './redux/User/certificateSlice';
 // ----------------------------------------------------------------------
 
 export default function App() {
   const dispatch = useDispatch();
 
   const { currentUser } = useSelector((state) => state.user);
+  const { certificateData,approve,reject,statePending } = useSelector((state) => state.certificate);
+  
   const token = currentUser?.accessToken;
   // State variable to track if user data has been fetched
   const [userDataFetched, setUserDataFetched] = useState(false);
-
+  const [certificate, setCertificate] = useState([]);
+  
   useEffect(() => {
     if (token && !userDataFetched) {
       AuthService.getAuthUser(token)
@@ -30,6 +33,8 @@ export default function App() {
           const accessToken = val.data.tokens.accessToken;
           dispatch(setToken({accessToken,refreshToken}));
           const userData = { ...val.data.user, refreshToken, accessToken };
+          const certificates =userData.certificateIssue
+          setCertificate(certificates)
           dispatch(signInSuccess(userData));
           setUserDataFetched(true); // Mark user data as fetched
         })
@@ -39,6 +44,13 @@ export default function App() {
         });
     }
   }, [token, userDataFetched]);
+
+
+  useEffect(()=>{
+    console.log(certificate);
+    dispatch(addCertificates(certificate))
+    console.log(certificate);
+  },[certificate])
 
   return (
     <ThemeProvider>

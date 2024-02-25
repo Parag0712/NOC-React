@@ -20,6 +20,7 @@ import Iconify from 'src/components/iconify';
 import AuthService from 'src/backend/AuthService';
 import { toast } from 'react-toastify';
 import { useRouter } from 'src/routes/hooks';
+import { setCertificate } from 'src/redux/User/userSlice';
 
 export default function RegisterView() {
   const theme = useTheme();
@@ -38,8 +39,10 @@ export default function RegisterView() {
         const accessToken = val.data.tokens.accessToken;
         dispatch(setToken({accessToken,refreshToken}));      
         const userData = { ...val.data.user, refreshToken, accessToken };
-        router.push('/');
+        dispatch(setCertificate(userData.certificateIssue))
         dispatch(signInSuccess(userData));
+        router.push('/');
+        
         toast.success(val.message);
       }).catch((error) => {
         toast.error(error);

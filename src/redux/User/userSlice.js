@@ -7,6 +7,7 @@ const initialState = {
     error: null,
     loading: false,
     token:null,
+    certificate:[]
 }
 
 // Create User Slice 
@@ -16,7 +17,6 @@ const userSlice = createSlice({
     reducers: {
         loadingInStart: (state) => {
             state.loading = true;
-            
         },
         loadingInStop: (state) => {
             state.loading = false
@@ -82,6 +82,12 @@ const userSlice = createSlice({
         removeToken: (state,payload) => {
             state.token = null
         },
+        setCertificate: (state,action) => {
+            state.certificate = action.payload;
+        },
+        updateCertificate: (state,action) => {
+            state.certificate = action.payload;
+        },
         signOutUserFailure: (state, action) => {
             state.error = action.payload;
             state.loading = false;
@@ -117,7 +123,9 @@ export const {
     addCertificate,
     removeCertificate,
     setToken,
-    removeToken
+    removeToken,
+    setCertificate,
+    updateCertificate
 } = userSlice.actions;
 
 export default userSlice.reducer;

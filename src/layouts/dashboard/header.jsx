@@ -14,7 +14,6 @@ import AuthService from 'src/backend/AuthService';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { removeToken, signOutUserSuccess } from 'src/redux/User/userSlice';
-import logo from 'src/components/logo';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +24,6 @@ export default function Header({ onOpenNav }) {
 
   const dispatch = useDispatch();
   const { token ,currentUser} = useSelector((state) => state.user);
-  console.log(token);
   const accesstoken = currentUser?.accessToken;
   const handleLogout = () => {
     AuthService.logout(accesstoken)

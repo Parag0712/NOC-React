@@ -9,21 +9,35 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Stack, Button, MenuItem, TextField } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useEffect, useState } from 'react';
-import format from 'date-fns/format';
+import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import CertificateService from 'src/backend/CertificateService';
 
-export default function appForm() {
+export default function appForm({reject,approve,statePending}) {
 
     const { register, handleSubmit, control, watch, formState: { errors } } = useForm();
-
+    const [loading,setLoading] = useState(false);
+    const {token} = useSelector((state)=>state.user);
     // Handle Certificate
     const handleCertificate = (data) => {
-        const dayjsDate = data.internship_starting_date;
-        const jsDate = dayjsDate?.toDate();
-        const dateString = jsDate?.toLocaleDateString(undefined, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        });
+        setLoading(true);
+        const dayjsDateStarting = dayjs(data.internship_starting_date);
+        const startingDate = dayjsDateStarting.format('YYYY-MM-DD');
+        const dayjsDateEnding = dayjs(data.internship_ending_date);
+        const endingDate = dayjsDateEnding.format('YYYY-MM-DD');
+
+        // Certificate Req
+        const tokens = token.accessToken;
+        CertificateService.createCertificateReq(data,startingDate,endingDate,tokens,"pending")
+        .then((value)=>{
+            // value.data.certificate
+            toast.success(value.message);
+        }).catch((error)=>{
+            console.log(error);
+        }).finally(()=>{
+            setLoading(false)
+        })
     }
 
     const colleges = [
@@ -40,9 +54,9 @@ export default function appForm() {
     return (
         <Container maxWidth="xl">
 
+                <Typography variant="h6" color={"error"}>your application rejected You can resubmit</Typography>
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                 <Typography variant="h4">Application Form</Typography>
-
             </Stack>
 
             {/* <Typography variant="h4">Application Form</Typography> */}
@@ -426,7 +440,7 @@ export default function appForm() {
                                 </Stack>
 
                             </Stack>
-                        </Stack> <Button type="submit" fullWidth sx={{ marginTop: "40px", padding: "10px" }} variant="contained">Send Application</Button>
+                        </Stack> <Button type="submit" fullWidth sx={{ marginTop: "40px", padding: "10px" }} variant="contained">{loading?"loading":"Send Application"} </Button>
                     </Grid>
                 </Grid>
             </form>

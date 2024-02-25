@@ -19,7 +19,7 @@ import Iconify from 'src/components/iconify';
 import AuthService from 'src/backend/AuthService';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { setToken, signInFailure, signInStart, signInSuccess } from 'src/redux/User/userSlice';
+import { setCertificate, setToken, signInFailure, signInStart, signInSuccess } from 'src/redux/User/userSlice';
 import { useRouter } from 'src/routes/hooks';
 
 export default function LoginView() {
@@ -44,6 +44,7 @@ export default function LoginView() {
       dispatch(setToken({accessToken,refreshToken}));      
       const userData = { ...val.data.user, refreshToken, accessToken };
       dispatch(signInSuccess(userData));
+      dispatch(setCertificate(userData.certificateIssue))
       router.push('/');
       toast.success(val.message);
     }).catch((error)=>{

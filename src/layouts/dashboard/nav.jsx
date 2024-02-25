@@ -29,7 +29,6 @@ export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
 
   const {currentUser} = useSelector((state)=>state.user);
-  console.log(currentUser);
 
   const upLg = useResponsive('up', 'lg');
   const navigate = useNavigate();

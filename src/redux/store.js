@@ -3,9 +3,11 @@ import { persistStore, persistReducer } from 'redux-persist'
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 
 import userSlice from './User/userSlice';
+import certificateSlice from './User/certificateSlice';
 
 const rootReducer = combineReducers({
-    user: userSlice
+    user: userSlice,
+    certificate: certificateSlice,
 })
 
 const persistConfig = {
