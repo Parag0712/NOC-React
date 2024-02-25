@@ -16,14 +16,36 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { bgGradient } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
+import AuthService from 'src/backend/AuthService';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { signInFailure, signInStart, signInSuccess } from 'src/redux/User/userSlice';
 
 export default function LoginView() {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const dispatch = useDispatch();
+  const [loading,setLoading] =useState(false)
 
+  // Handle Login
   const handleLogin = (data) => {
-    console.log(data);
+    dispatch(signInStart());
+    setLoading(true);
+    AuthService.login(data)
+    .then((val)=>{
+      console.log(val);
+      const refreshToken = val.data.tokens.refreshToken;
+      const accessToken = val.data.tokens.accessToken;      
+      const userData = { ...val.data.user, refreshToken, accessToken };
+      dispatch(signInSuccess(userData));
+      toast.success(val.message);
+    }).catch((error)=>{
+      toast.error(error);
+      dispatch(signInFailure());
+    }).finally(()=>{
+      setLoading(false)
+    })
   };
 
   return (
@@ -123,7 +145,8 @@ export default function LoginView() {
               variant="contained"
               color="inherit"
             >
-              Login
+              {loading?"loading":"Login"}
+              
             </LoadingButton>
           </form>
         </Card>

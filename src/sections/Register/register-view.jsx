@@ -14,16 +14,32 @@ import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import { bgGradient } from 'src/theme/css';
+import { useDispatch } from 'react-redux';
 
 import Iconify from 'src/components/iconify';
+import AuthService from 'src/backend/AuthService';
+import { toast } from 'react-toastify';
 
 export default function RegisterView() {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const dispatch = useDispatch();
 
+  // Handler Register
   const handleRegister = (data) => {
-    console.log(data);
+    AuthService.createAccount(data)
+      .then((val) => {
+        const refreshToken = val.data.tokens.refreshToken;
+        const accessToken = val.data.tokens.accessToken;
+        const userData = { ...val.data.user, refreshToken, accessToken };
+        console.log(userData);
+        // Now Redux Here
+        // and also redirect
+        toast.success(val.message);
+      }).catch((error) => {
+        toast.error(error);
+      })
   };
 
   return (
