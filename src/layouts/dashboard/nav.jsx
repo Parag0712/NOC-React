@@ -20,45 +20,25 @@ import Scrollbar from 'src/components/scrollbar';
 
 import { NAV } from './config-layout';
 import navConfig from './config-navigation';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
 
-  const upLg = useResponsive('up', 'lg');
+  const {currentUser} = useSelector((state)=>state.user);
+  console.log(currentUser);
 
+  const upLg = useResponsive('up', 'lg');
+  const navigate = useNavigate();
   useEffect(() => {
     if (openNav) {
       onCloseNav();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
-
-  const renderAccount = (
-    <Box
-      sx={{
-        my: 3,
-        mx: 2.5,
-        py: 2,
-        px: 2.5,
-        display: 'flex',
-        borderRadius: 1.5,
-        alignItems: 'center',
-        bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
-      }}
-    >
-      <Avatar src={account.photoURL} alt="photoURL" />
-
-      <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{account.displayName}</Typography>
-
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {account.role}
-        </Typography>
-      </Box>
-    </Box>
-  );
 
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
@@ -82,8 +62,33 @@ export default function Nav({ openNav, onCloseNav }) {
     >
       {/* <Logo sx={{ mt: 3, ml: 4 }} /> */}
 
+      <Box
+        sx={{
+          my: 3,
+          mx: 2.5,
+          py: 2,
+          px: 2.5,
+          display: 'flex',
+          borderRadius: 1.5,
+          alignItems: 'center',
+          cursor:'pointer',
+          bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
+        }}
+        onClick={()=>{
+          navigate("/profile")
+        }}
+      >
+        {/* here come url */}
+        <Avatar src={account.photoURL } alt="photoURL" />
 
-      {renderAccount}
+        <Box sx={{ ml: 2 }}>
+          <Typography variant="subtitle2">{currentUser?.firstName}</Typography>
+
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {account.role}
+          </Typography>
+        </Box>
+      </Box>
 
       {renderMenu}
 

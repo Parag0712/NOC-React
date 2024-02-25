@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import AppBar from '@mui/material/AppBar';
 import { useTheme } from '@mui/material/styles';
-import { Box, Stack, IconButton, Typography } from '@mui/material';
+import { Box, Stack, IconButton, Typography, Button } from '@mui/material';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -64,6 +64,9 @@ export default function Header({ onOpenNav }) {
           <Typography variant="h4" sx={{ mb: 5, color: "black", textAlign: "center" }}>
             Noc Certificate Generator
           </Typography>
+          <Button variant='contained'  >
+            
+          </Button>
         </Stack>
       </Box>
 

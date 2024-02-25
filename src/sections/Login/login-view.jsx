@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -20,6 +20,7 @@ import AuthService from 'src/backend/AuthService';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { signInFailure, signInStart, signInSuccess } from 'src/redux/User/userSlice';
+import { useRouter } from 'src/routes/hooks';
 
 export default function LoginView() {
   const theme = useTheme();
@@ -27,6 +28,12 @@ export default function LoginView() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
   const [loading,setLoading] =useState(false)
+  const navigate = useNavigate();
+
+  
+    
+  const router = useRouter();
+  
 
   // Handle Login
   const handleLogin = (data) => {
@@ -34,11 +41,13 @@ export default function LoginView() {
     setLoading(true);
     AuthService.login(data)
     .then((val)=>{
-      console.log(val);
+      navigate('/');
       const refreshToken = val.data.tokens.refreshToken;
       const accessToken = val.data.tokens.accessToken;      
       const userData = { ...val.data.user, refreshToken, accessToken };
       dispatch(signInSuccess(userData));
+      router.push('/');
+
       toast.success(val.message);
     }).catch((error)=>{
       toast.error(error);

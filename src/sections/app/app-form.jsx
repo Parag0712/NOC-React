@@ -17,8 +17,6 @@ export default function appForm() {
 
     // Handle Certificate
     const handleCertificate = (data) => {
-        console.log(data);
-        console.log(data.student_email);
         const dayjsDate = data.internship_starting_date;
         const jsDate = dayjsDate?.toDate();
         const dateString = jsDate?.toLocaleDateString(undefined, {
@@ -26,7 +24,6 @@ export default function appForm() {
             month: '2-digit',
             day: '2-digit'
         });
-        console.log(dateString);
     }
 
     const colleges = [
@@ -37,12 +34,9 @@ export default function appForm() {
     const [branchOptions, setBranchOptions] = useState([]);
     // Watch for changes in the "college_name" field
     useEffect(() => {
-        console.log(watch('college_name'));
         const selectedCollege = colleges.find(college => college.name === watch('college_name'));
-        console.log(selectedCollege);
         const branches = selectedCollege ? setBranchOptions(selectedCollege?.branch) : "";
     }, [watch('college_name')]);
-
     return (
         <Container maxWidth="xl">
 
@@ -203,6 +197,7 @@ export default function appForm() {
                                     select
                                     fullWidth
                                     label="College"
+                                    value={watch("college_name") || ''}
                                     name='college_name'
                                     {...register("college_name")}
                                 >
@@ -220,6 +215,7 @@ export default function appForm() {
                                     fullWidth
                                     label="Branch"
                                     name='college_branch'
+                                    value={watch("college_branch") || ''}
                                     {...register("college_branch")}
                                 >
                                     {branchOptions.map((value) => (
@@ -400,8 +396,6 @@ export default function appForm() {
                                                 <DatePicker
                                                     {...field}
                                                     label="Start Date"
-                                                    renderInput={(params) => <TextField {...params} required />} // Add required attribute
-                                                    value={field.value ? format(new Date(field.value), 'yyyy-MM-dd') : null}
                                                 />
                                             )}
                                         />
@@ -422,8 +416,6 @@ export default function appForm() {
                                                 <DatePicker
                                                     {...field}
                                                     label="End Date"
-                                                    renderInput={(params) => <TextField {...params} required />} // Add required attribute
-                                                    value={field.value ? format(new Date(field.value), 'yyyy-MM-dd') : null}
                                                 />
                                             )}
                                         />

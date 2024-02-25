@@ -1,7 +1,9 @@
 import { lazy, Suspense } from 'react';
+import { useSelector } from 'react-redux';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from 'src/layouts/dashboard';
+import Protected from './components/protected';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const RegisterPage = lazy(() => import('src/pages/register'));
@@ -12,32 +14,45 @@ export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // ----------------------------------------------------------------------
-
 export default function Router() {
+
   const routes = useRoutes([
     {
       element: (
-        <DashboardLayout>
-          <Suspense>
-            <Outlet />
-          </Suspense>
-        </DashboardLayout>
+        <Protected authentication={true}>
+          <DashboardLayout>
+            <Suspense>
+              <Outlet />
+            </Suspense>
+          </DashboardLayout >
+        </Protected>
       ),
       children: [
-        { element: <IndexPage />, index: true },
+        {
+          element:
+            <IndexPage />
+          , index: true
+        },
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
+        { path: 'profile', element: <BlogPage /> },
       ],
     },
     {
       path: 'login',
-      element: <LoginPage />,
+      element:
+        <Protected authentication={false}>
+          <LoginPage />
+        </Protected>,
     },
-    
+
     {
       path: 'register',
-      element: <RegisterPage />,
+      element:
+        <Protected authentication={false}>
+          <RegisterPage />
+        </Protected>
+      ,
     },
     {
       path: '404',

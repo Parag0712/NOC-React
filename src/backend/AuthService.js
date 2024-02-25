@@ -55,6 +55,21 @@ class Auth {
         }
     }
 
+     //Get Current User
+     async getAuthUser() {
+        try {
+            const response = await this.api.get('users/getCurrentUser');
+            return response.data;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
+
     async refreshToken(id) {
         // console.log(id);
         try {
@@ -95,20 +110,7 @@ class Auth {
         }
     }
 
-    //Get Current User
-    async getAuthUser() {
-        try {
-            const response = await this.api.get('auth/get-user');
-            return response.data;
-        } catch (error) {
-            if (error.response.data) {
-                throw error.response.data.message;
-            } else {
-                throw error
-            }
-        }
-    }
-
+   
     async googleAuth({ username, email, avatar }) {
         try {
             const response = await this.api.post('auth/google', {
