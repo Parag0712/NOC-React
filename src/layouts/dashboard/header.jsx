@@ -7,10 +7,14 @@ import { Box, Stack, IconButton, Typography, Button } from '@mui/material';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgBlur } from 'src/theme/css';
-
+import { FaPowerOff } from "react-icons/fa";
 import Iconify from 'src/components/iconify';
-
 import { NAV, HEADER } from './config-layout';
+import AuthService from 'src/backend/AuthService';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { removeToken, signOutUserSuccess } from 'src/redux/User/userSlice';
+import logo from 'src/components/logo';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +23,21 @@ export default function Header({ onOpenNav }) {
 
   const lgUp = useResponsive('up', 'lg');
 
+  const dispatch = useDispatch();
+  const { token ,currentUser} = useSelector((state) => state.user);
+  console.log(token);
+  const accesstoken = currentUser?.accessToken;
+  const handleLogout = () => {
+    AuthService.logout(accesstoken)
+      .then((data) => {
+        toast.success(data.message);
+        dispatch(signOutUserSuccess());
+        dispatch(removeToken());
+
+      }).catch((error) => {
+        toast.error(error)
+      })
+  }
 
   return (
     <AppBar
@@ -60,12 +79,14 @@ export default function Header({ onOpenNav }) {
           </IconButton>
         )}
 
-        <Stack direction="row" alignItems="center"  spacing={1}>
+        <Stack direction="row" width={"100%"} justifyContent={"space-between"} alignItems="center" spacing={1}>
           <Typography variant="h4" sx={{ mb: 5, color: "black", textAlign: "center" }}>
             Noc Certificate Generator
           </Typography>
-          <Button variant='contained'  >
-            
+          <Button variant='contained' color='error' sx={{ borderRa: "100%" }}
+            onClick={handleLogout}
+          >
+            <FaPowerOff size={"25px"} />
           </Button>
         </Stack>
       </Box>

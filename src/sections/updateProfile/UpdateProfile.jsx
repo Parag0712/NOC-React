@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -16,6 +16,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { bgGradient } from 'src/theme/css';
 
 import Iconify from 'src/components/iconify';
+import { useDispatch, useSelector } from 'react-redux';
+import AuthService from 'src/backend/AuthService';
+import { toast } from 'react-toastify';
+import { signInSuccess, updateUserSuccess } from 'src/redux/User/userSlice';
+import { Link } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -23,14 +28,39 @@ export default function UpdateProfile() {
     const theme = useTheme();
     // const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
-
     const [avatarSrc, setAvatarSrc] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
-    const { register, handleSubmit,setValue, formState: { errors } } = useForm();
+    const [isFormModified, setIsFormModified] = useState(false);
+    const [avatarChanged, setAvatarChanged] = useState(false);
+    const [loading, setLoading] = useState(false);
 
+
+    const { currentUser, token } = useSelector((state) => state.user)
+    const dispatch = useDispatch();
+    console.log(token);
+    const { register, handleSubmit, setValue, formState: { errors, isDirty } } = useForm({
+        defaultValues: {
+            firstName: currentUser.firstName || "",
+            lastName: currentUser.lastName,
+            password: "",
+        }
+    });
+    // handle error
     const handleUpdate = (data) => {
-        console.log(data);
-    };
+        setLoading(true)
+
+        AuthService.updateAccount(data, token?.accessToken).then((value) => {
+            console.log(value);
+            const userData = { ...value.data.updatedUser };
+            console.log(userData);
+            dispatch(updateUserSuccess(userData));
+            toast.success(value.message)
+        }).catch((error) => {
+            toast.error(error);
+        }).finally(() => {
+            setLoading(false)
+        })
+    }
 
     // imageChange
     const imageChange = (e) => {
@@ -40,7 +70,6 @@ export default function UpdateProfile() {
                 setErrorMessage('File size exceeds 5MB.');
                 return;
             }
-
             const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (!validImageTypes.includes(selectedFile.type)) {
                 setErrorMessage('Please select a JPEG, PNG, or GIF image.');
@@ -50,12 +79,27 @@ export default function UpdateProfile() {
             const reader = new FileReader();
             reader.onload = () => {
                 setAvatarSrc(reader.result);
-                setValue('profileImage', selectedFile); 
+                setValue('profileImage', selectedFile);
+                setAvatarChanged(true)
                 setErrorMessage('');
             };
             reader.readAsDataURL(selectedFile);
         }
     };
+
+    useEffect(() => {
+
+        setAvatarSrc(currentUser?.profileImage?.imgUrl);
+    }, [])
+    useEffect(() => {
+        setIsFormModified(isDirty || avatarChanged);
+
+    }, [isDirty, avatarChanged]); // Update isFormModified when isDirty changes
+
+    const handleFormChange = () => {
+        setIsFormModified(isDirty);
+    };
+
 
     return (
         <Box
@@ -82,7 +126,7 @@ export default function UpdateProfile() {
                 >
                     <Typography variant="h4">Update Profile</Typography>
 
-                    <form onSubmit={handleSubmit(handleUpdate)}>
+                    <form onSubmit={handleSubmit(handleUpdate)} onChange={handleFormChange}>
                         <Stack spacing={3} >
                             <Stack alignItems="center" >
                                 <label htmlFor="fileInput">
@@ -196,9 +240,16 @@ export default function UpdateProfile() {
                             variant="contained"
                             color="inherit"
                             sx={{ marginTop: "20px" }}
+                            disabled={!isFormModified || loading}
                         >
-                            Update Profile
+                            {loading ? "Loading" : "Update Profile"}
                         </LoadingButton>
+
+                        <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ mt: 2}}>
+                            <Link to={'/forgetpassword'} variant="subtitle2"  underline="hover" style={{color:"#212b36"}}>
+                                Change password?
+                            </Link>
+                        </Stack>
                     </form>
                 </Card>
             </Stack>

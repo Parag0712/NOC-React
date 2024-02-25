@@ -79,7 +79,7 @@ export default function Nav({ openNav, onCloseNav }) {
         }}
       >
         {/* here come url */}
-        <Avatar src={account.photoURL } alt="photoURL" />
+        <Avatar src={currentUser?.profileImage?.imgUrl || account.photoURL } alt="photoURL" />
 
         <Box sx={{ ml: 2 }}>
           <Typography variant="subtitle2">{currentUser?.firstName}</Typography>

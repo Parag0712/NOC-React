@@ -1,5 +1,5 @@
 /* eslint-disable perfectionist/sort-imports */
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'src/global.css';
 
 
@@ -7,30 +7,42 @@ import Router from 'src/routes/sections';
 import ThemeProvider from 'src/theme';
 
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AuthService from './backend/AuthService';
-import { useDispatch } from 'react-redux';
-import { signInFailure, signInSuccess } from './redux/User/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken, signInFailure, signInSuccess } from './redux/User/userSlice';
 
 // ----------------------------------------------------------------------
 
 export default function App() {
   const dispatch = useDispatch();
 
+  const { currentUser } = useSelector((state) => state.user);
+  const token = currentUser?.accessToken;
+  // State variable to track if user data has been fetched
+  const [userDataFetched, setUserDataFetched] = useState(false);
+
   useEffect(() => {
-    dispatch(signInSuccess());
-    AuthService.getAuthUser()
-      .then((val) => {
-        // const refreshToken = val.data.refreshToken;
-        const userData = { ...val.data.user };
-        console.log(userData);
-        dispatch(signInSuccess(userData))
-        console.log("eh");
-      }).catch((error) => {
-        console.log(error);
-        dispatch(signInFailure());
-      })
-  }, []);
+    if (token && !userDataFetched) {
+      AuthService.getAuthUser(token)
+        .then((val) => {
+          console.log(val);
+          const refreshToken = val.data.tokens.refreshToken;
+          const accessToken = val.data.tokens.accessToken;
+          dispatch(setToken({accessToken,refreshToken}));
+          const userData = { ...val.data.user, refreshToken, accessToken };
+          console.log(userData);
+          console.log("sda");
+          toast.success("sa")
+          dispatch(signInSuccess(userData));
+          setUserDataFetched(true); // Mark user data as fetched
+        })
+        .catch((error) => {
+          console.log(error);
+          dispatch(signInFailure());
+        });
+    }
+  }, [token, userDataFetched]);
 
   return (
     <ThemeProvider>

@@ -55,10 +55,16 @@ class Auth {
         }
     }
 
-     //Get Current User
-     async getAuthUser() {
+    //Get Current User
+    async getAuthUser(token) {
+        console.log(token);
         try {
-            const response = await this.api.get('users/getCurrentUser');
+            const response = await this.api.get('users/getCurrentUser', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log(response.data);
             return response.data;
         } catch (error) {
             if (error.response.data) {
@@ -68,6 +74,28 @@ class Auth {
             }
         }
     }
+
+
+    // Logout Function
+    async logout(token) {
+
+        console.log(token);
+        try {
+            const response = await this.api.post("users/logout", null,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
 
 
     async refreshToken(id) {
@@ -88,18 +116,23 @@ class Auth {
         }
     }
 
-    async updateAccount({ email, username, password, avatar }) {
+    async updateAccount({ lastName, firstName, password, profileImage }, token) {
         try {
-            const response = await this.api.patch('user/update-account', {
-                email,
-                username,
-                password,
-                avatar
-            }, {
+            const formData = new FormData();
+            formData.append('lastName', lastName);
+            formData.append('firstName', firstName);
+            formData.append('password', password);
+            if (profileImage) {
+                formData.append('profileImage', profileImage);
+            }
+
+
+            const response = await this.api.patch('users/updateProfile', formData, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    Authorization: `Bearer ${token}`
                 }
             });
+
             return response.data;
         } catch (error) {
             if (error.response.data) {
@@ -110,7 +143,7 @@ class Auth {
         }
     }
 
-   
+
     async googleAuth({ username, email, avatar }) {
         try {
             const response = await this.api.post('auth/google', {
@@ -132,20 +165,6 @@ class Auth {
             }
         }
     }
-    // Logout Function
-    async logout() {
-        try {
-            const response = await this.api.post("auth/logout");
-            return response.data
-        } catch (error) {
-            if (error.response.data) {
-                throw error.response.data.message;
-            } else {
-                throw error
-            }
-        }
-    }
-
     // delete function
     async delete() {
         try {

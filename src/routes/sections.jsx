@@ -4,6 +4,7 @@ import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from 'src/layouts/dashboard';
 import Protected from './components/protected';
+import ChangePasswordPage from 'src/pages/changePassword';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const RegisterPage = lazy(() => import('src/pages/register'));
@@ -36,6 +37,7 @@ export default function Router() {
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'profile', element: <BlogPage /> },
+        { path: 'ChangePassword', element: <ChangePasswordPage /> },
       ],
     },
     {

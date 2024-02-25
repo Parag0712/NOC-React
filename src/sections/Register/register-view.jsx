@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import Iconify from 'src/components/iconify';
 import AuthService from 'src/backend/AuthService';
 import { toast } from 'react-toastify';
+import { useRouter } from 'src/routes/hooks';
 
 export default function RegisterView() {
   const theme = useTheme();
@@ -26,16 +27,19 @@ export default function RegisterView() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
 
+  
+  const router = useRouter();
+
   // Handler Register
   const handleRegister = (data) => {
     AuthService.createAccount(data)
       .then((val) => {
         const refreshToken = val.data.tokens.refreshToken;
         const accessToken = val.data.tokens.accessToken;
+        dispatch(setToken({accessToken,refreshToken}));      
         const userData = { ...val.data.user, refreshToken, accessToken };
-        console.log(userData);
-        // Now Redux Here
-        // and also redirect
+        router.push('/');
+        dispatch(signInSuccess(userData));
         toast.success(val.message);
       }).catch((error) => {
         toast.error(error);

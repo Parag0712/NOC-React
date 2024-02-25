@@ -6,7 +6,7 @@ const initialState = {
     certificateData:null,
     error: null,
     loading: false,
-    loaded:false
+    token:null,
 }
 
 // Create User Slice 
@@ -69,6 +69,18 @@ const userSlice = createSlice({
             state.currentUser = null;
             state.loading = false;
             state.error = null;
+            state.token = null
+            state.status =false
+        },
+        signOutUserFailure: (state, action) => {
+            state.error = action.payload;
+            state.loading = false;
+        },
+        setToken: (state,action) => {
+            state.token = action.payload;
+        },
+        removeToken: (state,payload) => {
+            state.token = null
         },
         signOutUserFailure: (state, action) => {
             state.error = action.payload;
@@ -103,7 +115,9 @@ export const {
     signOutUserSuccess,
     signOutUserStart,
     addCertificate,
-    removeCertificate
+    removeCertificate,
+    setToken,
+    removeToken
 } = userSlice.actions;
 
 export default userSlice.reducer;
