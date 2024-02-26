@@ -3,8 +3,8 @@ import { UserView } from 'src/sections/user/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
-  return (    
-      <UserView />
+export default function AdminCertificatePage() {
+  return (
+    <>s</>
   );
 }
