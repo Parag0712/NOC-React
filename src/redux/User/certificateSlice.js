@@ -14,11 +14,11 @@ const certificateSlice = createSlice({
                 if (!state.certificateData.some(existingCert => existingCert._id === certificate._id)) {
                     state.certificateData.push(certificate);
                     if (index === action.payload.length - 1) {
-                        if (certificate.certificate_status === 'pending') {
+                        if (certificate.certificate_status == 'pending') {
                             state.statePending = true;
                             state.reject = false;
                             state.approve = false;
-                        } else if (certificate.certificate_status === false) {
+                        } else if (certificate.certificate_status == "false") {
                             state.reject = true;
                             state.statePending = false;
                             state.approve = false;
@@ -61,6 +61,16 @@ const certificateSlice = createSlice({
             });
         },
 
+        updatePendingState:(state)=>{
+            state.approve = "pending"
+        },
+        updateRejectState:(state)=>{
+            state.approve = "false"
+        },
+        
+        updateApproveState:(state)=>{
+            state.approve = "true"
+        },
         clearCertificate: (state) => {
             state.statePending = "";
             state.reject = "";
@@ -70,5 +80,5 @@ const certificateSlice = createSlice({
     },
 });
 
-export const { addCertificate, removeCertificate, updateCertificate, addCertificates, clearCertificate } = certificateSlice.actions;
+export const { addCertificate, removeCertificate, updateCertificate, addCertificates, clearCertificate ,updateApproveState,updateRejectState,updatePendingState} = certificateSlice.actions;
 export default certificateSlice.reducer;

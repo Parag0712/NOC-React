@@ -7,22 +7,55 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { updateApproveState, updatePendingState, updateRejectState } from 'src/redux/User/certificateSlice';
 
 // ----------------------------------------------------------------------
 
 export default function AppPage() {
-
-
   const dispatch = useDispatch();
-  const { certificateData, statePending = true, reject, approve } = useSelector((state) => state.certificate);
+  const { certificateData } = useSelector((state) => state.certificate);
+  const [lastCertificateData, setLastCertificateData] = useState(null);
+
+  // States for filtering based on certificate status
+  const [statePending, setStatePending] = useState(false);
+  const [reject, setReject] = useState(false);
+  const [approve, setApprove] = useState(false);
+
+  useEffect(() => {
+    if (certificateData && certificateData.length > 0) {
+      // Get the last item of the array
+      const lastItem = certificateData[certificateData.length - 1];
+      setLastCertificateData(lastItem);
+
+      // Set states based on the status of the last item
+      if (lastItem.certificate_status == 'false') {
+        setReject(true);
+        setStatePending(false);
+        setApprove(false);
+        dispatch(updateRejectState())
+      } else if (lastItem.certificate_status == 'true') {
+        setApprove(true);
+        setStatePending(false);
+        setReject(false);
+        dispatch(updateApproveState())
+      } else {
+        setStatePending(true);
+        setReject(false);
+        setApprove(false);
+        updatePendingState();
+      }
+    }
+  }, [certificateData]);
+
   return (
     <>
       {reject && (<><Typography>You can resubmit your form due to rejection.</Typography> <AppFormView /></>)}
-      {reject && <AppFormView reject={reject} />}
-      {approve && <Resubmit textMessage={"Your application has been approved."}  link="true" />}
-      {statePending && <Resubmit textMessage={"Your application all ready submit."}  />}
+      {reject == "true" && <AppFormView reject={reject} />}
+      {approve && <Resubmit textMessage={"Your application has been approved."} link="true" />}
+      {statePending && <Resubmit textMessage={"Your application all ready submit."} />}
       {!reject && !statePending && !approve && <AppFormView />}
-      <AppFormView></AppFormView> 
+      {/* <AppFormView></AppFormView>  */}
     </>
   );
 }

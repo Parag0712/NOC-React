@@ -21,7 +21,6 @@ import AuthService from 'src/backend/AuthService';
 import { toast } from 'react-toastify';
 import { useRouter } from 'src/routes/hooks';
 import { addCertificates } from 'src/redux/User/certificateSlice';
-// import { setCertificate } from 'src/redux/User/userSlice';
 
 export default function RegisterView() {
   const theme = useTheme();
@@ -29,7 +28,7 @@ export default function RegisterView() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
 
-  
+
   const router = useRouter();
 
   // Handler Register

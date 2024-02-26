@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import CertificateService from 'src/backend/CertificateService';
-import { addCertificate, clearCertificate } from 'src/redux/User/certificateSlice';
+import { addCertificate, clearCertificate, updatePendingState } from 'src/redux/User/certificateSlice';
 import { clearUser } from 'src/redux/User/userSlice';
 
 export default function appForm({ reject, approve, statePending }) {
@@ -40,9 +40,8 @@ export default function appForm({ reject, approve, statePending }) {
             .then((value) => {
                 // value.data.certificate
                 const certificate = value.data.certificate
-                console.log(certificate);
                 dispatch(addCertificate(certificate));
-
+                dispatch(updatePendingState());
                 toast.success(value.message);
             }).catch((error) => {
                 console.log(error);
