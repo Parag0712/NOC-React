@@ -1,5 +1,5 @@
 import React from 'react'
-import AdminForm from 'src/routes/Admin/AdminTable'
+import AdminForm from 'src/sections/Admin/AdminTable'
 
 export default function PendingCertificatesPage() {
   return (

@@ -26,6 +26,7 @@ import {
 import Iconify from "src/components/iconify";
 import Label from "src/components/label";
 import Scrollbar from "src/components/scrollbar";
+import CustomizedDialogs from "./Dialog";
 
 export default function AdminForm() {
     const [certificates, setCertificates] = useState([]);
@@ -38,6 +39,16 @@ export default function AdminForm() {
     const { certificateData } = useSelector(state => state.certificate);
     const { currentUser } = useSelector(state => state.user);
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    
     const tableHeadings = {
         'student.student_name': 'Name',
         'student.student_id': 'Id',
@@ -164,6 +175,7 @@ export default function AdminForm() {
                                             </TableSortLabel>
                                         </TableCell>
                                     ))}
+                                    <TableCell>View</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -193,7 +205,9 @@ export default function AdminForm() {
                                                 {item?.certificate_status === 'true' && 'success'}
                                                 {item?.certificate_status === 'pending' && 'pending'}
                                             </Label>
-                                        </TableCell>
+                                            
+                                        </TableCell >
+                                        <TableCell  sx={{cursor:"pointer",color:"blue",textAlign:"left"}} onClick={()=>{setOpen}}>View</TableCell>
                                     </TableRow>
                                 ))}
                                 {emptyRows > 0 && (
@@ -203,6 +217,8 @@ export default function AdminForm() {
                                 )}
                             </TableBody>
                         </Table>
+
+                        <CustomizedDialogs open={open} handleClose={handleClose}></CustomizedDialogs>
                     </TableContainer>
                 </Scrollbar>
                 <TablePagination

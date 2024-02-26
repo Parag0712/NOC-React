@@ -39,11 +39,20 @@ export default function Nav({ openNav, onCloseNav }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
+  
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
-      {navConfig.map((item) => (
+      {/* {navConfig.map((item) => (
+        
         <NavItem key={item.title} item={item} />
-      ))}
+      ))} */}
+
+{navConfig.map((item) => (
+      // Check if the item is meant for admins and currentUser is an admin
+      (!item.admin || (item?.admin && currentUser?.isAdmin)) &&
+      <NavItem key={item.title} item={item} />
+    ))}
+      
     </Stack>
   );
 

@@ -37,13 +37,14 @@ export default function Router() {
             <IndexPage />
           , index: true
         },
-        { path: 'PendingCertificate', element: 
-        <AdminProtected>
-<PendingCertificatePage />
-        </AdminProtected>
-         },
-        { path: 'RejectCertificate', element: <RejectCertificatePage /> },
-        { path: 'ApproveCertificate', element: <ApproveCertificatePage /> },
+        {
+          path: 'PendingCertificate', element:
+            <AdminProtected>
+              <PendingCertificatePage />
+            </AdminProtected>
+        },
+        { path: 'RejectCertificate', element: <AdminProtected><RejectCertificatePage /></AdminProtected> },
+        { path: 'ApproveCertificate', element:<AdminProtected> <ApproveCertificatePage /></AdminProtected> },
         { path: 'mycertificate', element: <MyCertificatePage /> },
         { path: 'profile', element: <BlogPage /> },
         { path: 'ChangePassword', element: <ChangePasswordPage /> },

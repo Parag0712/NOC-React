@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import AppBar from '@mui/material/AppBar';
 import { useTheme } from '@mui/material/styles';
-import { Box, Stack, IconButton, Typography, Button } from '@mui/material';
+import { Box, Stack, IconButton, Typography, Button, Popover, MenuItem } from '@mui/material';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { clearUser, removeToken, signOutUserSuccess } from 'src/redux/User/userSlice';
 import { clearCertificate } from 'src/redux/User/certificateSlice';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +24,15 @@ export default function Header({ onOpenNav }) {
 
   const lgUp = useResponsive('up', 'lg');
 
+  const [open, setOpen] = useState(null);
+
+  const handleOpenMenu = (event) => {
+    setOpen(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setOpen(null);
+  };
   const dispatch = useDispatch();
   const { token ,currentUser} = useSelector((state) => state.user);
   const accesstoken = currentUser?.accessToken;
@@ -85,11 +95,38 @@ export default function Header({ onOpenNav }) {
           <Typography variant="h4" sx={{ mb: 5, color: "black", textAlign: "center" }}>
             Noc Certificate Generator
           </Typography>
-          <Button variant='contained' color='error' sx={{ borderRa: "100%" }}
+
+
+          <IconButton onClick={handleOpenMenu}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+
+          <Popover
+            open={!!open}
+            anchorEl={open}
+            onClose={handleCloseMenu}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            PaperProps={{
+              sx: { width: 140 },
+            }}
+          >
+  
+          <MenuItem onClick={()=>{
+            handleCloseMenu()
+            handleLogout();
+          }} sx={{ color: 'error.main' }}>
+          
+            <Iconify icon="material-symbols:logout-sharp" sx={{ mr: 2 }} />
+            Logout
+          </MenuItem>
+        </Popover>
+
+          {/* <Button variant='contained' color='error' sx={{ borderRa: "100%" }}
             onClick={handleLogout}
           >
             <FaPowerOff size={"25px"} />
-          </Button>
+          </Button> */}
         </Stack>
       </Box>
 
