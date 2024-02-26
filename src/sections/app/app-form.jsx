@@ -10,16 +10,23 @@ import { Stack, Button, MenuItem, TextField } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import CertificateService from 'src/backend/CertificateService';
+import { addCertificate, clearCertificate } from 'src/redux/User/certificateSlice';
+import { clearUser } from 'src/redux/User/userSlice';
 
-export default function appForm({reject,approve,statePending}) {
+export default function appForm({ reject, approve, statePending }) {
+
 
     const { register, handleSubmit, control, watch, formState: { errors } } = useForm();
-    const [loading,setLoading] = useState(false);
-    const {token} = useSelector((state)=>state.user);
+    const [loading, setLoading] = useState(false);
+    const { token } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
     // Handle Certificate
+
+
     const handleCertificate = (data) => {
         setLoading(true);
         const dayjsDateStarting = dayjs(data.internship_starting_date);
@@ -29,15 +36,19 @@ export default function appForm({reject,approve,statePending}) {
 
         // Certificate Req
         const tokens = token.accessToken;
-        CertificateService.createCertificateReq(data,startingDate,endingDate,tokens,"pending")
-        .then((value)=>{
-            // value.data.certificate
-            toast.success(value.message);
-        }).catch((error)=>{
-            console.log(error);
-        }).finally(()=>{
-            setLoading(false)
-        })
+        CertificateService.createCertificateReq(data, startingDate, endingDate, tokens, "pending")
+            .then((value) => {
+                // value.data.certificate
+                const certificate = value.data.certificate
+                console.log(certificate);
+                dispatch(addCertificate(certificate));
+
+                toast.success(value.message);
+            }).catch((error) => {
+                console.log(error);
+            }).finally(() => {
+                setLoading(false)
+            })
     }
 
     const colleges = [
@@ -54,12 +65,12 @@ export default function appForm({reject,approve,statePending}) {
     return (
         <Container maxWidth="xl">
 
+            {reject &&
                 <Typography variant="h6" color={"error"}>your application rejected You can resubmit</Typography>
+            }
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-                <Typography variant="h4">Application Form</Typography>
+                <Typography variant="h4" > Application Form</Typography>
             </Stack>
-
-            {/* <Typography variant="h4">Application Form</Typography> */}
 
             <form onSubmit={handleSubmit(handleCertificate)}>
 
@@ -213,7 +224,23 @@ export default function appForm({reject,approve,statePending}) {
                                     label="College"
                                     value={watch("college_name") || ''}
                                     name='college_name'
-                                    {...register("college_name")}
+                                    helperText={
+                                        <motion.div
+                                            style={{
+                                                color: 'red',
+                                                opacity: errors.college_name ? 1 : 0,
+                                                transition: "opacity 0.3s ease-in-out",
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            {errors.college_name && errors.college_name.message}
+                                        </motion.div>
+                                    }
+                                    error={!!errors.college_name}
+                                    {...register("college_name",
+                                        {
+                                            required: 'College name is required',
+                                        })}
                                 >
                                     {
                                         colleges.map((value) => (
@@ -230,7 +257,23 @@ export default function appForm({reject,approve,statePending}) {
                                     label="Branch"
                                     name='college_branch'
                                     value={watch("college_branch") || ''}
-                                    {...register("college_branch")}
+
+                                    helperText={
+                                        <motion.div
+                                            style={{
+                                                color: 'red',
+                                                opacity: errors.college_branch ? 1 : 0,
+                                                transition: "opacity 0.3s ease-in-out",
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            {errors.college_branch && errors.college_branch.message}
+                                        </motion.div>
+                                    }
+                                    error={!!errors.college_branch}
+                                    {...register("college_branch", {
+                                        required: 'College branch is required',
+                                    })}
                                 >
                                     {branchOptions.map((value) => (
                                         <MenuItem key={value} value={value}>
@@ -440,7 +483,7 @@ export default function appForm({reject,approve,statePending}) {
                                 </Stack>
 
                             </Stack>
-                        </Stack> <Button type="submit" fullWidth sx={{ marginTop: "40px", padding: "10px" }} variant="contained">{loading?"loading":"Send Application"} </Button>
+                        </Stack> <Button type="submit" fullWidth sx={{ marginTop: "40px", padding: "10px" }} variant="contained">{loading ? "loading" : "Send Application"} </Button>
                     </Grid>
                 </Grid>
             </form>

@@ -2,12 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     status:false,
-    currentUser: null,
-    certificateData:null,
-    error: null,
+    currentUser: "",
+    certificateData:"",
+    error: "",
     loading: false,
-    token:null,
-    certificate:[]
+    token:"",
 }
 
 // Create User Slice 
@@ -92,16 +91,9 @@ const userSlice = createSlice({
             state.error = action.payload;
             state.loading = false;
         },
-        addCertificate: (state, action) => {
-            state.certificateData = action.payload;
-            state.loading = false;
-            state.error = null;
+        clearUser: (state) => {
+            state = null
         },
-        removeCertificate: (state) => {
-            state.certificateData = null;
-            state.loading = false;
-            state.error = null;
-        }
     }
 })
 
@@ -120,12 +112,9 @@ export const {
     signOutUserFailure,
     signOutUserSuccess,
     signOutUserStart,
-    addCertificate,
-    removeCertificate,
     setToken,
     removeToken,
-    setCertificate,
-    updateCertificate
+    clearUser
 } = userSlice.actions;
 
 export default userSlice.reducer;

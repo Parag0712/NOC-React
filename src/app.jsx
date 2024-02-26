@@ -17,10 +17,10 @@ import { addCertificate, addCertificates } from './redux/User/certificateSlice';
 export default function App() {
   const dispatch = useDispatch();
 
-  const { currentUser } = useSelector((state) => state.user);
-  const { certificateData,approve,reject,statePending } = useSelector((state) => state.certificate);
+  const  user = useSelector((state) => state.user);
+  // const { certificateData,approve,reject,statePending }  = useSelector((state) => state.certificate);
   
-  const token = currentUser?.accessToken;
+  const token = user?.currentUser?.accessToken;
   // State variable to track if user data has been fetched
   const [userDataFetched, setUserDataFetched] = useState(false);
   const [certificate, setCertificate] = useState([]);
@@ -33,8 +33,12 @@ export default function App() {
           const accessToken = val.data.tokens.accessToken;
           dispatch(setToken({accessToken,refreshToken}));
           const userData = { ...val.data.user, refreshToken, accessToken };
-          const certificates =userData.certificateIssue
-          setCertificate(certificates)
+          const certificates = userData.certificateIssue
+            dispatch(addCertificates(certificates))
+          
+          // setCertificate(certificates)
+
+          console.log(certificate);
           dispatch(signInSuccess(userData));
           setUserDataFetched(true); // Mark user data as fetched
         })
@@ -46,11 +50,10 @@ export default function App() {
   }, [token, userDataFetched]);
 
 
-  useEffect(()=>{
-    console.log(certificate);
-    dispatch(addCertificates(certificate))
-    console.log(certificate);
-  },[certificate])
+  // useEffect(()=>{
+  //   console.log(certificate);
+  //   dispatch(addCertificates(certificate))
+  // },[certificate])
 
   return (
     <ThemeProvider>

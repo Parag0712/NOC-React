@@ -13,7 +13,8 @@ import { NAV, HEADER } from './config-layout';
 import AuthService from 'src/backend/AuthService';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { removeToken, signOutUserSuccess } from 'src/redux/User/userSlice';
+import { clearUser, removeToken, signOutUserSuccess } from 'src/redux/User/userSlice';
+import { clearCertificate } from 'src/redux/User/certificateSlice';
 
 // ----------------------------------------------------------------------
 
@@ -28,9 +29,12 @@ export default function Header({ onOpenNav }) {
   const handleLogout = () => {
     AuthService.logout(accesstoken)
       .then((data) => {
+                
         toast.success(data.message);
         dispatch(signOutUserSuccess());
         dispatch(removeToken());
+        dispatch(clearUser())
+        dispatch(clearCertificate())
 
       }).catch((error) => {
         toast.error(error)

@@ -11,7 +11,7 @@ export const RegisterPage = lazy(() => import('src/pages/register'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
 export const UserPage = lazy(() => import('src/pages/user'));
 export const LoginPage = lazy(() => import('src/pages/login'));
-export const ProductsPage = lazy(() => import('src/pages/products'));
+export const MyCertificatePage = lazy(() => import('src/pages/mycertificate'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // ----------------------------------------------------------------------
@@ -35,7 +35,7 @@ export default function Router() {
           , index: true
         },
         { path: 'user', element: <UserPage /> },
-        { path: 'products', element: <ProductsPage /> },
+        { path: 'mycertificate', element: <MyCertificatePage /> },
         { path: 'profile', element: <BlogPage /> },
         { path: 'ChangePassword', element: <ChangePasswordPage /> },
       ],

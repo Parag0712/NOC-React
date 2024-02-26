@@ -19,15 +19,16 @@ import Iconify from 'src/components/iconify';
 import AuthService from 'src/backend/AuthService';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-import { setCertificate, setToken, signInFailure, signInStart, signInSuccess } from 'src/redux/User/userSlice';
+import { setToken, signInFailure, signInStart, signInSuccess } from 'src/redux/User/userSlice';
 import { useRouter } from 'src/routes/hooks';
+import { addCertificates } from 'src/redux/User/certificateSlice';
 
 export default function LoginView() {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
-  const [loading,setLoading] =useState(false)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
   const router = useRouter();
@@ -37,22 +38,26 @@ export default function LoginView() {
     dispatch(signInStart());
     setLoading(true);
     AuthService.login(data)
-    .then((val)=>{
-      navigate('/');
-      const refreshToken = val.data.tokens.refreshToken;
-      const accessToken = val.data.tokens.accessToken;
-      dispatch(setToken({accessToken,refreshToken}));      
-      const userData = { ...val.data.user, refreshToken, accessToken };
-      dispatch(signInSuccess(userData));
-      dispatch(setCertificate(userData.certificateIssue))
-      router.push('/');
-      toast.success(val.message);
-    }).catch((error)=>{
-      toast.error(error);
-      dispatch(signInFailure());
-    }).finally(()=>{
-      setLoading(false)
-    })
+      .then((val) => {
+        const accessToken = val.data.tokens.accessToken;
+        AuthService.getAuthUser(accessToken)
+          .then((val) => {
+            const refreshToken = val.data.tokens.refreshToken;
+            const accessToken = val.data.tokens.accessToken;
+            dispatch(setToken({ accessToken, refreshToken }));
+            const userData = { ...val.data.user, refreshToken, accessToken };
+            const certificates = userData.certificateIssue
+            dispatch(addCertificates(certificates))
+            dispatch(signInSuccess(userData));
+            router.push('/');
+          })
+          toast.success(val.message);
+      }).catch((error) => {
+        toast.error(error);
+        dispatch(signInFailure());
+      }).finally(() => {
+        setLoading(false)
+      })
   };
 
   return (
@@ -152,8 +157,8 @@ export default function LoginView() {
               variant="contained"
               color="inherit"
             >
-              {loading?"loading":"Login"}
-              
+              {loading ? "loading" : "Login"}
+
             </LoadingButton>
           </form>
         </Card>

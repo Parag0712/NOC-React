@@ -33,7 +33,11 @@ const certificateSlice = createSlice({
         },
         addCertificate: (state, action) => {
             const newCertificate = action.payload;
-            state.certificateData = [...state.certificateData, newCertificate];
+            console.log(newCertificate);
+            state.certificateData.push(newCertificate);
+            state.statePending = true;
+            state.reject = false;
+            state.approve = false;
         },
         removeCertificate: (state, action) => {
             const certificateIdToRemove = action.payload;
@@ -45,8 +49,15 @@ const certificateSlice = createSlice({
                 certificate.id === updatedCertificate.id ? updatedCertificate : certificate
             );
         },
+        
+        clearCertificate: (state) => {
+            state.statePending = "";
+            state.reject = "";
+            state.approve = "";
+            state.certificateData = []
+        }
     },
 });
 
-export const { addCertificate, removeCertificate, updateCertificate, addCertificates } = certificateSlice.actions;
+export const { addCertificate, removeCertificate, updateCertificate, addCertificates ,clearCertificate} = certificateSlice.actions;
 export default certificateSlice.reducer;

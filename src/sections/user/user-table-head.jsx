@@ -27,7 +27,7 @@ export default function UserTableHead({
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox" />
-          
+
 
         {headLabel.map((headCell) => (
           <TableCell
