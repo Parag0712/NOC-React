@@ -44,12 +44,23 @@ const certificateSlice = createSlice({
             state.certificateData = state.certificateData.filter(certificate => certificate.id !== certificateIdToRemove);
         },
         updateCertificate: (state, action) => {
-            const updatedCertificate = action.payload;
-            state.certificateData = state.certificateData.map(certificate =>
-                certificate.id === updatedCertificate.id ? updatedCertificate : certificate
-            );
+            const { item, status } = action.payload;
+
+            // Update the status of the certificate
+            state.certificateData = state.certificateData.map(certificate => {
+                if (certificate._id === item._id) {
+                    // If the certificate ID matches the updated certificate ID, update the status
+                    return {
+                        ...certificate,
+                        certificate_status: status
+                    };
+                } else {
+                    // Otherwise, return the certificate unchanged
+                    return certificate;
+                }
+            });
         },
-        
+
         clearCertificate: (state) => {
             state.statePending = "";
             state.reject = "";
@@ -59,5 +70,5 @@ const certificateSlice = createSlice({
     },
 });
 
-export const { addCertificate, removeCertificate, updateCertificate, addCertificates ,clearCertificate} = certificateSlice.actions;
+export const { addCertificate, removeCertificate, updateCertificate, addCertificates, clearCertificate } = certificateSlice.actions;
 export default certificateSlice.reducer;

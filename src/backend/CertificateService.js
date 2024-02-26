@@ -52,6 +52,34 @@ class Certificate {
         }
     }
 
+
+    async updateCertificate(status,id,token) {
+        try {
+            const response = await this.api.patch(
+                `certificate/updateStateCertificate/${id}`,
+                {
+                    certificate_status:status
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
+    // updateStateCertificate/65d7a550957fd7bdd5dd9af3
+
     // Login Function
     async login({ email, password }) {
         try {

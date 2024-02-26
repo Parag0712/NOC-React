@@ -1,10 +1,10 @@
 
-import { UserView } from 'src/sections/user/view';
+import AdminForm from 'src/sections/Admin/AdminTable';
 
 // ----------------------------------------------------------------------
 
 export default function AdminCertificatePage() {
   return (
-    <>s</>
+    <AdminForm reject="true"></AdminForm>
   );
 }

@@ -3,6 +3,6 @@ import AdminForm from 'src/sections/Admin/AdminTable'
 
 export default function PendingCertificatesPage() {
   return (
-    <AdminForm></AdminForm>
+    <AdminForm pending="true"></AdminForm>
   )
 }

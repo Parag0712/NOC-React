@@ -6,8 +6,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+// import CloseIcon from '@mui/icons-material/Close';
+import { IoMdClose as CloseIcon } from "react-icons/io";
 import Typography from '@mui/material/Typography';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCertificate } from 'src/redux/User/certificateSlice';
+import CertificateService from 'src/backend/CertificateService';
+import { toast } from 'react-toastify';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -19,8 +24,22 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-export default function CustomizedDialogs({open,handleClose}) {
+export default function CustomizedDialogs({ open, handleClose, item }) {
 
+    const user = useSelector((state)=>state.user)
+    const certificate = useSelector((state)=>state.certificate)
+
+    const dispatch = useDispatch();
+
+    const handleUpdate = (status)=>{
+        CertificateService.updateCertificate(status,item._id,user?.token?.accessToken)
+        .then((val)=>{
+            toast.success(val.message);
+            dispatch(updateCertificate({item,status}))
+        }).catch((error)=>{
+            toast.error(error)
+        })
+    }
     return (
         <React.Fragment>
             <BootstrapDialog
@@ -28,9 +47,6 @@ export default function CustomizedDialogs({open,handleClose}) {
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
-                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    Modal title
-                </DialogTitle>
                 <IconButton
                     aria-label="close"
                     onClick={handleClose}
@@ -43,25 +59,72 @@ export default function CustomizedDialogs({open,handleClose}) {
                 >
                     <CloseIcon />
                 </IconButton>
-                <DialogContent dividers>
-                    <Typography gutterBottom>
-                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                        dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-                        consectetur ac, vestibulum at eros.
+                <DialogContent dividers >
+                    <Typography variant='h4' sx={{ marginBottom: "10px" }}>
+                        Student Details
                     </Typography>
-                    <Typography gutterBottom>
-                        Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-                        Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+                    <Typography variant='h5' sx={{ fontWeight: "100", justifyContent: "space-between", gap: "100px", fontSize: "20px", display: "flex" }}>
+                        <div>Name :{item?.student?.student_name}</div>
+                        <div>Email :{item?.student?.student_email}</div>
                     </Typography>
-                    <Typography gutterBottom>
-                        Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-                        magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-                        ullamcorper nulla non metus auctor fringilla.
+                    <Typography variant='h5' sx={{ fontWeight: "100", justifyContent: "space-between", gap: "100px", fontSize: "20px", display: "flex" }}>
+                        <div>Sem :{item?.student?.student_sem}</div>
+                        <div>Phone :{item?.student?.student_phoneNo}</div>
                     </Typography>
+                    <hr></hr>
+
+                    <Typography variant='h4' sx={{ marginBottom: "10px" }}>
+                        College Details
+                    </Typography>
+                    <Typography variant='h5' sx={{ fontWeight: "100", justifyContent: "space-between", gap: "100px", fontSize: "20px", display: "flex" }}>
+                        <div>College : {item?.college?.college_name}</div>
+                        <div>Branch : {item?.college?.college_branch}</div>
+                    </Typography>
+
+                    <hr></hr>
+
+                    <Typography variant='h4' sx={{ marginBottom: "10px" }}>
+                        Hr Details
+                    </Typography>
+                    <Typography variant='h5' sx={{ fontWeight: "100", justifyContent: "space-between", gap: "100px", fontSize: "20px", display: "flex" }}>
+                        <div>Name : {item?.hr?.hr_name}</div>
+                        <div>Email : {item?.hr?.hr_email}</div>
+                    </Typography>
+                    
+                    <Typography variant='h5' sx={{ fontWeight: "100", justifyContent: "space-between", gap: "100px", fontSize: "20px", display: "flex" }}>
+                        <div>Name : {item?.hr?.hr_phoneNo}</div>
+                    </Typography>
+                    <hr></hr>
+
+                    <Typography variant='h4' sx={{ marginBottom: "10px" }}>
+                        Company Details
+                    </Typography>
+                    <Typography variant='h5' sx={{ fontWeight: "100", justifyContent: "space-between", gap: "100px", fontSize: "20px", display: "flex" }}>
+                        <div>College : {item?.company?.company_name}</div>
+                        <div>Branch : {item?.company?.company_location}</div>
+                    </Typography>
+
+                    <hr />
+                    <Typography variant='h4' sx={{ marginBottom: "10px" }}>
+                        Internship Details
+                    </Typography>
+                    <Typography variant='h5' sx={{ fontWeight: "100", justifyContent: "space-between", gap: "100px", fontSize: "20px", display: "flex" }}>
+                        <div>Start Date : {item?.internship_ending_date}</div>
+                        <div>End Date : {item?.internship_ending_date}</div>
+                    </Typography>
+                    
                 </DialogContent>
                 <DialogActions>
-                    <Button autoFocus onClick={handleClose}>
-                        Save changes
+                    <Button autoFocus onClick={()=> {
+                        handleClose()
+                        handleUpdate("false")
+                        } } color='error' variant='contained'>
+                        Reject
+                    </Button>
+                    <Button autoFocus onClick={()=>{
+                        handleClose()
+                        handleUpdate("true")}} variant='contained' color='info'>
+                        Approve
                     </Button>
                 </DialogActions>
             </BootstrapDialog>

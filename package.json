@@ -48,6 +48,7 @@
     "react-table": "^7.8.0",
     "react-toastify": "^10.0.4",
     "redux-persist": "^6.0.0",
+    "run": "^1.5.0",
     "simplebar-react": "^3.2.4"
   },
   "devDependencies": {

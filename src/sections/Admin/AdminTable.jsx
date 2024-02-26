@@ -28,7 +28,7 @@ import Label from "src/components/label";
 import Scrollbar from "src/components/scrollbar";
 import CustomizedDialogs from "./Dialog";
 
-export default function AdminForm() {
+export default function AdminForm({pending,reject,approve}) {
     const [certificates, setCertificates] = useState([]);
     const [sortOrder, setSortOrder] = useState({});
     const [searchQuery, setSearchQuery] = useState('');
@@ -41,9 +41,7 @@ export default function AdminForm() {
 
     const [open, setOpen] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    const [certificate,setCertificate] = useState(""); 
     const handleClose = () => {
         setOpen(false);
     };
@@ -64,7 +62,41 @@ export default function AdminForm() {
             setCertificates(certificateData)
             setSortOrder({ studentName: 'asc' });
         }
+        
     }, [certificateData]);
+
+    useEffect(() => {
+        if (pending) {
+            const pendingCertificates = certificateData.filter((certificate) => certificate.certificate_status === 'pending');
+            setCertificates(pendingCertificates);
+        }
+        
+        if (reject) {
+            const rejectCertificates = certificateData.filter((certificate) => certificate.certificate_status === 'false');
+            setCertificates(rejectCertificates);
+        }
+        if (approve) {
+            const approveCertificates = certificateData.filter((certificate) => certificate.certificate_status == 'true');
+            setCertificates(approveCertificates);
+        }
+    }, [pending,reject,approve, certificateData]);
+
+    console.log(certificates);
+
+    // useEffect(()=>{
+    //     const pendingCertificates = certificates.filter((certificate) => certificate.certificate_status === 'pending');
+    //     console.log(pendingCertificates);
+        // certificate_status: 'false',
+        
+        // else if (reject) {
+        //     const rejectedCertificates = certificates.filter((certificate) => certificate.certificate_status === 'false');
+        //     setCertificates(rejectedCertificates);
+        // } else if (approve) {
+        //     const approvedCertificates = certificates.filter((certificate) => certificate.certificate_status === 'true');
+        //     setCertificates(approvedCertificates);
+        // }
+    // },[])
+
 
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value.toLowerCase());
@@ -175,7 +207,7 @@ export default function AdminForm() {
                                             </TableSortLabel>
                                         </TableCell>
                                     ))}
-                                    <TableCell>View</TableCell>
+                                    <TableCell >View</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -207,7 +239,11 @@ export default function AdminForm() {
                                             </Label>
                                             
                                         </TableCell >
-                                        <TableCell  sx={{cursor:"pointer",color:"blue",textAlign:"left"}} onClick={()=>{setOpen}}>View</TableCell>
+                                        <TableCell  sx={{cursor:"pointer",color:"blue",textAlign:"left"}} onClick={()=>{
+                                            setOpen(true);
+                                            setCertificate(item);
+                                        }}>View</TableCell>
+
                                     </TableRow>
                                 ))}
                                 {emptyRows > 0 && (
@@ -216,9 +252,9 @@ export default function AdminForm() {
                                     </TableRow>
                                 )}
                             </TableBody>
+                                <CustomizedDialogs item={certificate} open={open}  handleClose={handleClose}></CustomizedDialogs>
                         </Table>
 
-                        <CustomizedDialogs open={open} handleClose={handleClose}></CustomizedDialogs>
                     </TableContainer>
                 </Scrollbar>
                 <TablePagination
