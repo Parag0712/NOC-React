@@ -36,7 +36,8 @@ export default function MyCertificatePage() {
     'student.student_phoneNo': 'Phone No',
     'college.college_name': 'College Name',
     'college.college_branch': 'College Branch',
-    'certificateStatus': 'Certificate Status'
+    'certificateStatus': 'Certificate Status',
+    'createdAt': 'Issue Date'
   };
 
 
@@ -63,7 +64,6 @@ export default function MyCertificatePage() {
     setPage(newPage);
   };
 
-  
   const sortedCertificates = certificates.slice().sort((a, b) => {
     const column = Object.keys(sortOrder).find(key => sortOrder[key]);
     const order = sortOrder[column] || 'asc';
@@ -144,6 +144,7 @@ export default function MyCertificatePage() {
                         {item?.certificate_status === 'pending' && 'pending'}
                       </Label>
                     </TableCell>
+                    <TableCell>{item?.createdAt ? new Date(item.createdAt).toLocaleString() : ''}</TableCell>
                   </TableRow>
                 ))}
                 {emptyRows > 0 && (

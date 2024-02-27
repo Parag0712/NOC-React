@@ -28,7 +28,7 @@ import Label from "src/components/label";
 import Scrollbar from "src/components/scrollbar";
 import CustomizedDialogs from "./Dialog";
 
-export default function AdminForm({pending,reject,approve}) {
+export default function AdminForm({ pending, reject, approve }) {
     const [certificates, setCertificates] = useState([]);
     const [sortOrder, setSortOrder] = useState({});
     const [searchQuery, setSearchQuery] = useState('');
@@ -41,12 +41,12 @@ export default function AdminForm({pending,reject,approve}) {
 
     const [open, setOpen] = React.useState(false);
 
-    const [certificate,setCertificate] = useState(""); 
+    const [certificate, setCertificate] = useState("");
     const handleClose = () => {
         setOpen(false);
     };
 
-    
+
     const tableHeadings = {
         'student.student_name': 'Name',
         'student.student_id': 'Id',
@@ -54,7 +54,9 @@ export default function AdminForm({pending,reject,approve}) {
         'student.student_phoneNo': 'Phone No',
         'college.college_name': 'College Name',
         'college.college_branch': 'College Branch',
-        'certificateStatus': 'Certificate Status'
+        'certificateStatus': 'Certificate Status',
+        'View': 'view',
+        "createdAt": 'Certificate Issue Date'
     };
 
     useEffect(() => {
@@ -62,7 +64,7 @@ export default function AdminForm({pending,reject,approve}) {
             setCertificates(certificateData)
             setSortOrder({ studentName: 'asc' });
         }
-        
+
     }, [certificateData]);
 
     useEffect(() => {
@@ -70,7 +72,7 @@ export default function AdminForm({pending,reject,approve}) {
             const pendingCertificates = certificateData.filter((certificate) => certificate.certificate_status === 'pending');
             setCertificates(pendingCertificates);
         }
-        
+
         if (reject) {
             const rejectCertificates = certificateData.filter((certificate) => certificate.certificate_status === 'false');
             setCertificates(rejectCertificates);
@@ -79,22 +81,22 @@ export default function AdminForm({pending,reject,approve}) {
             const approveCertificates = certificateData.filter((certificate) => certificate.certificate_status == 'true');
             setCertificates(approveCertificates);
         }
-    }, [pending,reject,approve, certificateData]);
+    }, [pending, reject, approve, certificateData]);
 
     console.log(certificates);
 
     // useEffect(()=>{
     //     const pendingCertificates = certificates.filter((certificate) => certificate.certificate_status === 'pending');
     //     console.log(pendingCertificates);
-        // certificate_status: 'false',
-        
-        // else if (reject) {
-        //     const rejectedCertificates = certificates.filter((certificate) => certificate.certificate_status === 'false');
-        //     setCertificates(rejectedCertificates);
-        // } else if (approve) {
-        //     const approvedCertificates = certificates.filter((certificate) => certificate.certificate_status === 'true');
-        //     setCertificates(approvedCertificates);
-        // }
+    // certificate_status: 'false',
+
+    // else if (reject) {
+    //     const rejectedCertificates = certificates.filter((certificate) => certificate.certificate_status === 'false');
+    //     setCertificates(rejectedCertificates);
+    // } else if (approve) {
+    //     const approvedCertificates = certificates.filter((certificate) => certificate.certificate_status === 'true');
+    //     setCertificates(approvedCertificates);
+    // }
     // },[])
 
 
@@ -207,7 +209,6 @@ export default function AdminForm({pending,reject,approve}) {
                                             </TableSortLabel>
                                         </TableCell>
                                     ))}
-                                    <TableCell >View</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -237,13 +238,15 @@ export default function AdminForm({pending,reject,approve}) {
                                                 {item?.certificate_status === 'true' && 'success'}
                                                 {item?.certificate_status === 'pending' && 'pending'}
                                             </Label>
-                                            
+
                                         </TableCell >
-                                        <TableCell  sx={{cursor:"pointer",color:"blue",textAlign:"left"}} onClick={()=>{
+                                        <TableCell sx={{ cursor: "pointer", color: "blue", textAlign: "left" }} onClick={() => {
                                             setOpen(true);
                                             setCertificate(item);
                                         }}>View</TableCell>
-
+                                        <TableCell>
+                                            {item?.createdAt ? new Date(item.createdAt).toLocaleString() : ''}
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                                 {emptyRows > 0 && (
@@ -252,7 +255,7 @@ export default function AdminForm({pending,reject,approve}) {
                                     </TableRow>
                                 )}
                             </TableBody>
-                                <CustomizedDialogs item={certificate} open={open}  handleClose={handleClose}></CustomizedDialogs>
+                            <CustomizedDialogs item={certificate} open={open} handleClose={handleClose}></CustomizedDialogs>
                         </Table>
 
                     </TableContainer>
