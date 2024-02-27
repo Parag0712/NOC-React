@@ -50,7 +50,7 @@ export default function Nav({ openNav, onCloseNav }) {
 {navConfig.map((item) => (
       // Check if the item is meant for admins and currentUser is an admin
       (!item.admin || (item?.admin && currentUser?.isAdmin)) &&
-      <NavItem key={item.title} item={item} />
+      <NavItem key={item.title}  item={item} />
     ))}
       
     </Stack>

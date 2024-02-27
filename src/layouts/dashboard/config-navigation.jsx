@@ -1,5 +1,11 @@
 import SvgColor from 'src/components/svg-color';
 // ----------------------------------------------------------------------
+import { IoHome } from "react-icons/io5";
+import { GrHistory } from "react-icons/gr";
+import { MdOutlineVerified } from "react-icons/md";
+import { MdOutlinePendingActions } from "react-icons/md";
+import { TbCertificateOff } from "react-icons/tb";
+import { CgProfile } from "react-icons/cg";
 
 const icon = (name) => (
   <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
@@ -10,35 +16,35 @@ const navConfig = [
   {
     title: 'Application',
     path: '/',
-    icon: icon('ic_analytics'),
+    icon: <IoHome fontSize={"22px"}/>
   },
   {
     title: 'Pending Certificate',
     path: '/PendingCertificate',
-    icon: icon('ic_blog'),
+    icon: <MdOutlinePendingActions  fontSize={"20px"}/>,
     admin:true
   },
   {
     title: 'Approved Certificate',
     path: '/ApproveCertificate',
-    icon: icon('ic_blog'),
+    icon: <MdOutlineVerified fontSize={"20px"}/>,
     admin:true
   },
   {
     title: 'Reject Certificate',
     path: '/RejectCertificate',
-    icon: icon('ic_blog'),
+    icon: <TbCertificateOff fontSize={"20px"}/>,
     admin:true
   },
   {
     title: 'My Certificate',
     path: '/mycertificate',
-    icon: icon('ic_cart'),
+    icon: <GrHistory fontSize={"20px" }/>,
   },
   {
     title: 'Profile',
     path: '/Profile',
-    icon: icon('ic_blog'),
+    icon: <CgProfile fontSize={"20px"}/>,
   }
 ];
 

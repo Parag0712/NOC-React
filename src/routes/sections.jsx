@@ -9,7 +9,7 @@ import AdminProtected from './components/adminProtected';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const RegisterPage = lazy(() => import('src/pages/register'));
-export const BlogPage = lazy(() => import('src/pages/blog'));
+export const BlogPage = lazy(() => import('src/pages/UpdateProfile'));
 export const RejectCertificatePage = lazy(() => import('src/pages/RejectCertificates'));
 export const ApproveCertificatePage = lazy(() => import('src/pages/ApproveCertificates'));
 export const PendingCertificatePage = lazy(() => import('src/pages/PendingCertificates'));
