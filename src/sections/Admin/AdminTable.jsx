@@ -85,21 +85,6 @@ export default function AdminForm({ pending, reject, approve }) {
 
     console.log(certificates);
 
-    // useEffect(()=>{
-    //     const pendingCertificates = certificates.filter((certificate) => certificate.certificate_status === 'pending');
-    //     console.log(pendingCertificates);
-    // certificate_status: 'false',
-
-    // else if (reject) {
-    //     const rejectedCertificates = certificates.filter((certificate) => certificate.certificate_status === 'false');
-    //     setCertificates(rejectedCertificates);
-    // } else if (approve) {
-    //     const approvedCertificates = certificates.filter((certificate) => certificate.certificate_status === 'true');
-    //     setCertificates(approvedCertificates);
-    // }
-    // },[])
-
-
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value.toLowerCase());
     };

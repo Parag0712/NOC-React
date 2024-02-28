@@ -53,6 +53,7 @@ class Certificate {
     }
 
 
+    // Update Certificate
     async updateCertificate(status,id,token) {
         try {
             const response = await this.api.patch(
@@ -78,20 +79,13 @@ class Certificate {
         }
     }
 
-    // updateStateCertificate/65d7a550957fd7bdd5dd9af3
-
-    // Login Function
-    async login({ email, password }) {
+    async getALlCertificate(token){
         try {
-            const response = await this.api.post('users/login', {
-                email,
-                password
-            }, {
+            const response = await this.api.get('certificate/getAllCertificate', {
                 headers: {
-                    'Content-Type': 'application/json'
+                    Authorization: `Bearer ${token}`
                 }
             });
-            console.log(response);
             return response.data;
         } catch (error) {
             if (error.response.data) {
@@ -101,7 +95,6 @@ class Certificate {
             }
         }
     }
-
 }
 
 const CertificateService = new Certificate();
