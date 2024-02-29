@@ -3,7 +3,6 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import './style.css'
 import { Button } from '@mui/material';
-
 import charusat from '../../../public/assets/charusat_logo.jpg'
 import cspit from '../../../public/assets/cspit_logo.jpg'
 
@@ -65,8 +64,8 @@ function Certificate(
           </div>
         </div>
         <div className="college_data">
-          <div className="student_data">CSPIT/IT/TOP/4-<span>INT-2024-25/20IT052</span></div>
-          <div className="application_date">{localApplicationDate}</div>
+          <div className="student_data">CSPIT/IT/TOP/4-<span>INT-2024-25/{studentId}</span></div>
+          <div className="application_date">Date : {localApplicationDate}</div>
         </div>
         <div className="letter_content">
           <p className="hr_information">

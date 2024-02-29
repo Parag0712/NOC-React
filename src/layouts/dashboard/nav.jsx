@@ -22,13 +22,14 @@ import { NAV } from './config-layout';
 import navConfig from './config-navigation';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { IoHome } from 'react-icons/io5';
 
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
 
-  const {currentUser} = useSelector((state)=>state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
   const upLg = useResponsive('up', 'lg');
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export default function Nav({ openNav, onCloseNav }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  
+
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
       {/* {navConfig.map((item) => (
@@ -47,12 +48,26 @@ export default function Nav({ openNav, onCloseNav }) {
         <NavItem key={item.title} item={item} />
       ))} */}
 
-{navConfig.map((item) => (
-      // Check if the item is meant for admins and currentUser is an admin
-      (!item.admin || (item?.admin && currentUser?.isAdmin)) &&
-      <NavItem key={item.title}  item={item} />
-    ))}
-      
+
+
+      {navConfig.map((item) => (
+        // Check if the item is meant for admins and currentUser is an admin
+        (!item.admin || (item?.admin && currentUser?.isAdmin)) &&
+        <NavItem key={item.title} item={item} />
+
+      ))}
+
+      {!currentUser?.isAdmin && (
+        <NavItem
+          key="Application"
+          item={{
+            title: "Application",
+            path: "/",
+            icon: <IoHome fontSize={"22px"} />
+          }}
+        />
+      )}
+
     </Stack>
   );
 
@@ -79,15 +94,15 @@ export default function Nav({ openNav, onCloseNav }) {
           display: 'flex',
           borderRadius: 1.5,
           alignItems: 'center',
-          cursor:'pointer',
+          cursor: 'pointer',
           bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
         }}
-        onClick={()=>{
+        onClick={() => {
           navigate("/profile")
         }}
       >
         {/* here come url */}
-        <Avatar src={currentUser?.profileImage?.imgUrl || account.photoURL } alt="photoURL" />
+        <Avatar src={currentUser?.profileImage?.imgUrl || account.photoURL} alt="photoURL" />
 
         <Box sx={{ ml: 2 }}>
           <Typography variant="subtitle2">{currentUser?.firstName}</Typography>

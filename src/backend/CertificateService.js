@@ -4,7 +4,7 @@ class Certificate {
 
     constructor() {
         this.api = axios.create({
-            baseURL: '/api/v1/',
+            baseURL: `${import.meta.env.BASE_URL}/api/v1/`,
             withCredentials: true
         });
     }

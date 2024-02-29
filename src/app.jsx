@@ -53,6 +53,7 @@ export default function App() {
           console.log(error);
         });
     } else if (!token && !userDataFetched) {
+      dispatch(signOutUserSuccess());
       console.log("expire token");
     }
   }, [token, userDataFetched]);

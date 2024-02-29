@@ -13,11 +13,7 @@ const icon = (name) => (
 );
 
 const navConfig = [
-  {
-    title: 'Application',
-    path: '/',
-    icon: <IoHome fontSize={"22px"}/>
-  },
+  
   {
     title: 'Pending Certificate',
     path: '/PendingCertificate',
