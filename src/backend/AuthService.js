@@ -4,7 +4,7 @@ class Auth {
 
     constructor() {
         this.api = axios.create({
-            baseURL: `${import.meta.env.BASE_URL}/api/v1/`,
+            baseURL: `https://noc-certificate-api.onrender.com/api/v1/`,
             withCredentials: true
         });
     }
