@@ -12,7 +12,7 @@ const Certificate = () => {
     html2canvas(certificate).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF();
-      const imgWidth = 208;
+      const imgWidth = 210;
       const imgHeight = canvas.height * imgWidth / canvas.width;
 
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);

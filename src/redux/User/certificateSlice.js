@@ -44,15 +44,17 @@ const certificateSlice = createSlice({
             state.certificateData = state.certificateData.filter(certificate => certificate.id !== certificateIdToRemove);
         },
         updateCertificate: (state, action) => {
-            const { item, status } = action.payload;
+            const { item, status,updated_at } = action.payload;
 
             // Update the status of the certificate
             state.certificateData = state.certificateData.map(certificate => {
                 if (certificate._id === item._id) {
                     // If the certificate ID matches the updated certificate ID, update the status
+
                     return {
                         ...certificate,
-                        certificate_status: status
+                        certificate_status: status,
+                        updatedAt:updated_at
                     };
                 } else {
                     // Otherwise, return the certificate unchanged

@@ -10,50 +10,52 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
 import AuthService from './backend/AuthService';
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken, signInFailure, signInSuccess } from './redux/User/userSlice';
+import { setToken, signInFailure, signInStart, signInSuccess, signOutUserSuccess } from './redux/User/userSlice';
 import { addCertificate, addCertificates } from './redux/User/certificateSlice';
+import CertificateService from './backend/CertificateService';
 // ----------------------------------------------------------------------
 
 export default function App() {
   const dispatch = useDispatch();
 
-  const  user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   // const { certificateData,approve,reject,statePending }  = useSelector((state) => state.certificate);
-  
+
   const token = user?.currentUser?.accessToken;
+  const refreshToken = user?.currentUser?.refreshToken;
   // State variable to track if user data has been fetched
   const [userDataFetched, setUserDataFetched] = useState(false);
   const [certificate, setCertificate] = useState([]);
-  
+
   useEffect(() => {
     if (token && !userDataFetched) {
       AuthService.getAuthUser(token)
         .then((val) => {
           const refreshToken = val.data.tokens.refreshToken;
           const accessToken = val.data.tokens.accessToken;
-          dispatch(setToken({accessToken,refreshToken}));
+          dispatch(setToken({ accessToken, refreshToken }));
           const userData = { ...val.data.user, refreshToken, accessToken };
           const certificates = userData.certificateIssue
-            dispatch(addCertificates(certificates))
-          
-          // setCertificate(certificates)
+          if (userData.isAdmin == true) {
+            CertificateService.getAllCertificate()
+              .then((val) => {
+                const certificates = val.data.certificate
+                dispatch(addCertificates(certificates));
+              }).catch((error) => {
+                console.log(error);
+              })
+          }
 
-          console.log(certificate);
           dispatch(signInSuccess(userData));
           setUserDataFetched(true); // Mark user data as fetched
         })
         .catch((error) => {
           console.log(error);
-          dispatch(signInFailure());
         });
+    } else if (!token && !userDataFetched) {
+      console.log("expire token");
     }
   }, [token, userDataFetched]);
-
-
-  // useEffect(()=>{
-  //   console.log(certificate);
-  //   dispatch(addCertificates(certificate))
-  // },[certificate])
 
   return (
     <ThemeProvider>

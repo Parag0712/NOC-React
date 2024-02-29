@@ -79,9 +79,28 @@ class Certificate {
         }
     }
 
-    async getALlCertificate(token){
+    // getAllCertificate
+    async getAllCertificate(token){
         try {
             const response = await this.api.get('certificate/getAllCertificate', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
+    //getUserCertificate
+    async getUserCertificate(token){
+        try {
+            const response = await this.api.get('certificate/getUserCertificate', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

@@ -1,4 +1,4 @@
-import { ForgetForm } from 'src/sections/Forget';
+import { ForgetForm } from 'src/sections/forget';
 
 // ----------------------------------------------------------------------
 

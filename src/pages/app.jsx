@@ -3,14 +3,10 @@ import { Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppFormView, Resubmit } from 'src/sections/app';
 
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { updateApproveState, updatePendingState, updateRejectState } from 'src/redux/User/certificateSlice';
 
-// ----------------------------------------------------------------------
+
 
 export default function AppPage() {
   const dispatch = useDispatch();
@@ -47,12 +43,13 @@ export default function AppPage() {
       }
     }
   }, [certificateData]);
-
+  console.log(lastCertificateData);
   return (
+
     <>
       {reject && (<><Typography>You can resubmit your form due to rejection.</Typography> <AppFormView /></>)}
       {reject == "true" && <AppFormView reject={reject} />}
-      {approve && <Resubmit textMessage={"Your application has been approved."} link="true" />}
+      {approve && <Resubmit textMessage={"Your application has been approved."} data={lastCertificateData} approve="true" link="true" />}
       {statePending && <Resubmit textMessage={"Your application all ready submit."} />}
       {!reject && !statePending && !approve && <AppFormView />}
       {/* <AppFormView></AppFormView>  */}

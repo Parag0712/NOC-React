@@ -26,19 +26,18 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 export default function CustomizedDialogs({ open, handleClose, item }) {
 
-    const user = useSelector((state)=>state.user)
-    const certificate = useSelector((state)=>state.certificate)
+    const user = useSelector((state) => state.user)
 
     const dispatch = useDispatch();
 
-    const handleUpdate = (status)=>{
-        CertificateService.updateCertificate(status,item._id,user?.token?.accessToken)
-        .then((val)=>{
-            toast.success(val.message);
-            dispatch(updateCertificate({item,status}))
-        }).catch((error)=>{
-            toast.error(error)
-        })
+    const handleUpdate = (status) => {
+        CertificateService.updateCertificate(status, item._id, user?.token?.accessToken)
+            .then((val) => {
+                toast.success(val.message);
+                dispatch(updateCertificate({ item, status,updated_at:val?.data?.certificate?.updatedAt }))
+            }).catch((error) => {
+                toast.error(error)
+            })
     }
     return (
         <React.Fragment>
@@ -90,7 +89,7 @@ export default function CustomizedDialogs({ open, handleClose, item }) {
                         <div>Name : {item?.hr?.hr_name}</div>
                         <div>Email : {item?.hr?.hr_email}</div>
                     </Typography>
-                    
+
                     <Typography variant='h5' sx={{ fontWeight: "100", justifyContent: "space-between", gap: "100px", fontSize: "20px", display: "flex" }}>
                         <div>Name : {item?.hr?.hr_phoneNo}</div>
                     </Typography>
@@ -112,18 +111,19 @@ export default function CustomizedDialogs({ open, handleClose, item }) {
                         <div>Start Date : {item?.internship_ending_date}</div>
                         <div>End Date : {item?.internship_ending_date}</div>
                     </Typography>
-                    
+
                 </DialogContent>
                 <DialogActions>
-                    <Button autoFocus onClick={()=> {
+                    <Button autoFocus onClick={() => {
                         handleClose()
                         handleUpdate("false")
-                        } } color='error' variant='contained'>
+                    }} color='error' variant='contained'>
                         Reject
                     </Button>
-                    <Button autoFocus onClick={()=>{
+                    <Button autoFocus onClick={() => {
                         handleClose()
-                        handleUpdate("true")}} variant='contained' color='info'>
+                        handleUpdate("true")
+                    }} variant='contained' color='info'>
                         Approve
                     </Button>
                 </DialogActions>

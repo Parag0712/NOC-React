@@ -1,4 +1,4 @@
-import { LoginView } from 'src/sections/Login';
+import { LoginView } from 'src/sections/login';
 
 
 

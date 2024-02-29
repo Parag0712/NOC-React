@@ -92,14 +92,17 @@ class Auth {
                     Authorization: `Bearer ${token}`
                 }
             });
+            
             console.log(response.data);
             return response.data;
         } catch (error) {
-            if (error.response.data) {
-                throw error.response.data.message;
-            } else {
-                throw error
-            }
+            console.log(error);
+            throw error;
+            // if (error.response.data) {
+            //     throw error.response.data.message;
+            // } else {
+            //     throw error
+            // }
         }
     }
 

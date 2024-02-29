@@ -1,4 +1,4 @@
-import { NewPassForm } from 'src/sections/Forget';
+import { NewPassForm } from 'src/sections/forget';
 
 // ----------------------------------------------------------------------
 

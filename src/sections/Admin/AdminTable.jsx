@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useTable } from "react-table";
 import {
     Avatar,
@@ -27,6 +27,9 @@ import Iconify from "src/components/iconify";
 import Label from "src/components/label";
 import Scrollbar from "src/components/scrollbar";
 import CustomizedDialogs from "./Dialog";
+import CertificateService from "src/backend/CertificateService";
+import { signInSuccess } from "src/redux/User/userSlice";
+import { addCertificates } from "src/redux/User/certificateSlice";
 
 export default function AdminForm({ pending, reject, approve }) {
     const [certificates, setCertificates] = useState([]);
@@ -35,12 +38,13 @@ export default function AdminForm({ pending, reject, approve }) {
     const [selectedCollege, setSelectedCollege] = useState('');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5); // Default rows per page
-
+    const [certificateDatas,setcertificateDatas] = useState([]);
     const { certificateData } = useSelector(state => state.certificate);
     const { currentUser } = useSelector(state => state.user);
 
     const [open, setOpen] = React.useState(false);
 
+    const dispatch = useDispatch();
     const [certificate, setCertificate] = useState("");
     const handleClose = () => {
         setOpen(false);
@@ -60,30 +64,35 @@ export default function AdminForm({ pending, reject, approve }) {
     };
 
     useEffect(() => {
-        if (certificateData) {
-            setCertificates(certificateData)
+        const token = currentUser?.accessToken;
+        CertificateService.getAllCertificate(token).then((val) => {
+            setcertificateDatas(val.data.certificate)
             setSortOrder({ studentName: 'asc' });
-        }
+        }).catch((error) => {
+            console.log(error);
+        })
 
-    }, [certificateData]);
+    }, [certificateData,currentUser]);
 
     useEffect(() => {
+
         if (pending) {
-            const pendingCertificates = certificateData.filter((certificate) => certificate.certificate_status === 'pending');
+            const pendingCertificates = certificateDatas.filter((certificate) => certificate.certificate_status === 'pending');
             setCertificates(pendingCertificates);
         }
 
         if (reject) {
-            const rejectCertificates = certificateData.filter((certificate) => certificate.certificate_status === 'false');
+            const rejectCertificates = certificateDatas.filter((certificate) => certificate.certificate_status === 'false');
             setCertificates(rejectCertificates);
         }
         if (approve) {
-            const approveCertificates = certificateData.filter((certificate) => certificate.certificate_status == 'true');
+            const approveCertificates = certificateDatas.filter((certificate) => certificate.certificate_status == 'true');
             setCertificates(approveCertificates);
         }
-    }, [pending, reject, approve, certificateData]);
 
-    console.log(certificates);
+    }, [certificateDatas])
+
+    console.log(certificateData);
 
     const handleSearchInputChange = (event) => {
         setSearchQuery(event.target.value.toLowerCase());
@@ -136,8 +145,11 @@ export default function AdminForm({ pending, reject, approve }) {
     };
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, sortedCertificates.length - page * rowsPerPage);
+    console.log(certificateDatas);
+
 
     return (
+
         <Container>
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                 <Typography variant="h4">Certificate History</Typography>
@@ -163,6 +175,7 @@ export default function AdminForm({ pending, reject, approve }) {
                             </InputAdornment>
                         }
                     />
+
                     <TextField
                         id="select-currency"
                         select
@@ -202,11 +215,10 @@ export default function AdminForm({ pending, reject, approve }) {
                                         <TableCell padding="checkbox" />
                                         <TableCell component="th" scope="row" padding="none">
                                             <Stack direction="row" alignItems="center" spacing={2}>
-                                                {currentUser?.profileImage?.imgUrl ? (
-                                                    <Avatar alt="s" src={currentUser.profileImage?.imgUrl} />
-                                                ) : (
-                                                    <Avatar alt="s" />
-                                                )}
+
+                                                <Typography variant="subtitle2" noWrap>
+                                                    {index + 1}
+                                                </Typography>
                                                 <Typography variant="subtitle2" noWrap>
                                                     {item.student?.student_name}
                                                 </Typography>

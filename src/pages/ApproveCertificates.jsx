@@ -4,6 +4,6 @@ import AdminForm from 'src/sections/Admin/AdminTable'
 
 export default function ApproveCertificatesPage() {
     return (
-    <AdminForm approve="true"></AdminForm>
+        <AdminForm approve="true"></AdminForm>
     )
 }

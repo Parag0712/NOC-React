@@ -19,6 +19,7 @@ import {
 import Iconify from "src/components/iconify";
 import Label from "src/components/label";
 import Scrollbar from "src/components/scrollbar";
+import CertificateService from "src/backend/CertificateService";
 
 export default function MyCertificatePage() {
   const [certificates, setCertificates] = useState([]);
@@ -26,7 +27,7 @@ export default function MyCertificatePage() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5); // Default rows per page
 
-  const { certificateData } = useSelector(state => state.certificate);
+  // const { certificateData } = useSelector(state => state.certificate);
   const { currentUser } = useSelector(state => state.user);
 
   const tableHeadings = {
@@ -41,12 +42,17 @@ export default function MyCertificatePage() {
   };
 
 
+  console.log(currentUser);
   useEffect(() => {
-    if (certificateData) {
+    const token = currentUser?.accessToken
+    CertificateService.getUserCertificate(token).then((val)=>{
+      const certificateData = val.data.certificate
       setCertificates(certificateData)
       setSortOrder({ studentName: 'asc' });
-    }
-  }, [certificateData]);
+    }).catch((error)=>{
+      console.log(error);
+    })    
+  }, [currentUser]);
 
   const handleSort = (column) => {
     setSortOrder((prevState) => ({
