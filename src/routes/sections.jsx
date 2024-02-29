@@ -2,10 +2,10 @@ import { lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
-import DashboardLayout from 'src/layouts/dashboard';
 import Protected from './components/protected';
 import ChangePasswordPage from 'src/pages/changePassword';
 import AdminProtected from './components/adminProtected';
+import DashboardLayout from 'src/layouts/dashboard';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const RegisterPage = lazy(() => import('src/pages/register'));
@@ -14,7 +14,7 @@ export const RejectCertificatePage = lazy(() => import('src/pages/RejectCertific
 export const ApproveCertificatePage = lazy(() => import('src/pages/ApproveCertificates'));
 export const PendingCertificatePage = lazy(() => import('src/pages/PendingCertificates'));
 export const LoginPage = lazy(() => import('src/pages/login'));
-export const MyCertificatePage = lazy(() => import('src/pages/mycertificate'));
+export const MyCertificatePage = lazy(() => import('src/pages/Mycertificate'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 
