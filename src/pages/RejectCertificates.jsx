@@ -1,5 +1,5 @@
+import AdminForm from "src/sections/Admin/AdminTable";
 
-import AdminForm from 'src/sections/Admin/AdminTable';
 
 // ----------------------------------------------------------------------
 

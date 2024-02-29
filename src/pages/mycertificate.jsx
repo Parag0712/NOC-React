@@ -16,10 +16,9 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import Iconify from "src/components/iconify";
-import Label from "src/components/label";
 import Scrollbar from "src/components/scrollbar";
 import CertificateService from "src/backend/CertificateService";
+import Label from "src/components/label/label";
 
 export default function MyCertificatePage() {
   const [certificates, setCertificates] = useState([]);

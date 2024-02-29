@@ -1,4 +1,4 @@
-import { RegisterView } from 'src/sections/register';
+import { RegisterView } from "src/sections/register";
 
 // ----------------------------------------------------------------------
 

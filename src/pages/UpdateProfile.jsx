@@ -1,6 +1,4 @@
-
-// import { BlogView } from 'src/sections/blog/view';
-import { UpdateProfile } from 'src/sections/updateProfile';
+import { UpdateProfile } from "src/sections/updateProfile";
 
 // ----------------------------------------------------------------------
 
