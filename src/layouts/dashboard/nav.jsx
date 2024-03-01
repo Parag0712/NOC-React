@@ -57,7 +57,6 @@ export default function Nav({ openNav, onCloseNav }) {
 
       ))}
 
-      {!currentUser?.isAdmin && (
         <NavItem
           key="Application"
           item={{
@@ -66,7 +65,6 @@ export default function Nav({ openNav, onCloseNav }) {
             icon: <IoHome fontSize={"22px"} />
           }}
         />
-      )}
 
     </Stack>
   );
