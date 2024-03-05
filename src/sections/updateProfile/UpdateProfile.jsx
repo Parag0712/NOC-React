@@ -37,7 +37,6 @@ export default function UpdateProfile() {
 
     const { currentUser, token } = useSelector((state) => state.user)
     const dispatch = useDispatch();
-    console.log(token);
     const { register, handleSubmit, setValue, formState: { errors, isDirty } } = useForm({
         defaultValues: {
             firstName: currentUser.firstName || "",
@@ -48,7 +47,6 @@ export default function UpdateProfile() {
     // handle error
     const handleUpdate = (data) => {
         setLoading(true)
-
         AuthService.updateAccount(data, token?.accessToken).then((value) => {
             console.log(value);
             const userData = { ...value.data.updatedUser };

@@ -39,13 +39,11 @@ export default function Header({ onOpenNav }) {
   const handleLogout = () => {
     AuthService.logout(accesstoken)
       .then((data) => {
-                
-        toast.success(data.message);
         dispatch(signOutUserSuccess());
         dispatch(removeToken());
         dispatch(clearUser())
         dispatch(clearCertificate())
-
+        toast.success(data.message);
       }).catch((error) => {
         toast.error(error)
       })

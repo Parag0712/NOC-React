@@ -36,9 +36,7 @@ export default function RegisterView() {
   const handleRegister = (data) => {
     AuthService.createAccount(data)
       .then((val) => {
-        const refreshToken = val.data.tokens.refreshToken;
         const accessToken = val.data.tokens.accessToken;
-
         AuthService.getAuthUser(accessToken)
           .then((val) => {
             const refreshToken = val.data.tokens.refreshToken;
@@ -49,8 +47,8 @@ export default function RegisterView() {
             dispatch(addCertificates(certificates))
             dispatch(signInSuccess(userData));
             router.push('/');
+            toast.success(val.message);
           })
-        toast.success(val.message);
       }).catch((error) => {
         toast.error(error);
       })

@@ -13,7 +13,6 @@ export default function AppPage() {
   // const { certificateData } = useSelector((state) => state.certificate);
   const [certificateData,setCertificateData] = useState([]);
   const { currentUser } = useSelector(state => state.user);
-
   const [lastCertificateData, setLastCertificateData] = useState(null);
 
   // States for filtering based on certificate status
@@ -27,9 +26,7 @@ export default function AppPage() {
     CertificateService.getUserCertificate(token).then((val)=>{
       const certificateData = val.data.certificate
       setCertificateData(certificateData)
-      setSortOrder({ studentName: 'asc' });
     }).catch((error)=>{
-      console.log(error);
     })    
   }, [currentUser]);
 
@@ -39,7 +36,6 @@ export default function AppPage() {
       // Get the last item of the array
       const lastItem = certificateData[certificateData.length - 1];
       setLastCertificateData(lastItem);
-      console.log(certificateData);
       // Set states based on the status of the last item
       if (lastItem.certificate_status == 'false') {
         setReject(true);
@@ -59,7 +55,6 @@ export default function AppPage() {
       }
     }
   }, [certificateData]);
-  console.log(lastCertificateData);
   return (
 
     <>

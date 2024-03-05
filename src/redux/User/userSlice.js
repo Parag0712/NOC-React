@@ -87,10 +87,6 @@ const userSlice = createSlice({
         updateCertificate: (state,action) => {
             state.certificate = action.payload;
         },
-        signOutUserFailure: (state, action) => {
-            state.error = action.payload;
-            state.loading = false;
-        },
         clearUser: (state) => {
             state = null
         },

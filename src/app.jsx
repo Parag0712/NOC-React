@@ -19,10 +19,10 @@ export default function App() {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
-  // const { certificateData,approve,reject,statePending }  = useSelector((state) => state.certificate);
 
   const token = user?.currentUser?.accessToken;
   const refreshToken = user?.currentUser?.refreshToken;
+
   // State variable to track if user data has been fetched
   const [userDataFetched, setUserDataFetched] = useState(false);
   const [certificate, setCertificate] = useState([]);
@@ -50,12 +50,12 @@ export default function App() {
           setUserDataFetched(true); // Mark user data as fetched
         })
         .catch((error) => {
+          if(error.response.data.message == "Invalid Access Token"){
+            dispatch(signOutUserSuccess());
+          }
           console.log(error);
         });
-    } else if (!token && !userDataFetched) {
-      dispatch(signOutUserSuccess());
-      console.log("expire token");
-    }
+    } 
   }, [token, userDataFetched]);
 
   return (

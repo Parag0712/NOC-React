@@ -19,6 +19,7 @@ import {
 import Scrollbar from "src/components/scrollbar";
 import CertificateService from "src/backend/CertificateService";
 import Label from "src/components/label/label";
+import { toast } from "react-toastify";
 
 export default function MyCertificatePage() {
   const [certificates, setCertificates] = useState([]);
@@ -41,7 +42,6 @@ export default function MyCertificatePage() {
   };
 
 
-  console.log(currentUser);
   useEffect(() => {
     const token = currentUser?.accessToken
     CertificateService.getUserCertificate(token).then((val)=>{
@@ -49,7 +49,7 @@ export default function MyCertificatePage() {
       setCertificates(certificateData)
       setSortOrder({ studentName: 'asc' });
     }).catch((error)=>{
-      console.log(error);
+      toast.error(error)
     })    
   }, [currentUser]);
 
