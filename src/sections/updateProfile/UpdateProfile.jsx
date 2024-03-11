@@ -39,8 +39,8 @@ export default function UpdateProfile() {
     const dispatch = useDispatch();
     const { register, handleSubmit, setValue, formState: { errors, isDirty } } = useForm({
         defaultValues: {
-            firstName: currentUser.firstName || "",
-            lastName: currentUser.lastName,
+            firstName: currentUser?.firstName || "",
+            lastName: currentUser?.lastName,
             password: "",
         }
     });

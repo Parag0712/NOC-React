@@ -82,6 +82,34 @@ class Auth {
             }
         }
     }
+    
+
+    async updateAdmin(status, id, token) {
+        try {
+            const response = await this.api.patch(
+                `users/updateIsAdminField`,
+                {
+                    userId:id,
+                    isAdmin:status
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
 
     //Get Current User
     async getAuthUser(token) {
@@ -92,7 +120,7 @@ class Auth {
                     Authorization: `Bearer ${token}`
                 }
             });
-            
+
             console.log(response.data);
             return response.data;
         } catch (error) {
@@ -107,12 +135,30 @@ class Auth {
     }
 
     // ChangePassword
-    async changePassword(password, newPassword , token) {
+    async changePassword(password, newPassword, token) {
         try {
             const response = await this.api.patch('users/changePassword', {
                 password,
                 newPassword
             }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            return response.data;
+        } catch (error) {
+            if (error.response.data) {
+                throw error.response.data.message;
+            } else {
+                throw error
+            }
+        }
+    }
+
+    async getAllUser(token) {
+        try {
+            const response = await this.api.get('users/getAllUser', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -167,49 +213,8 @@ class Auth {
         }
     }
 
-    async googleAuth({ username, email, avatar }) {
-        try {
-            const response = await this.api.post('auth/google', {
-                email,
-                username,
-                avatar
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+    
 
-            return response.data;
-        } catch (error) {
-            if (error.response.data) {
-                throw error.response.data.message;
-            } else {
-                throw error
-            }
-        }
-    }
-    // delete function
-    async delete() {
-        try {
-            const response = await this.api.delete("user/delete-account");
-            return response.data
-        } catch (error) {
-            if (error.response.data) {
-                throw error.response.data.message;
-            } else {
-                throw error
-            }
-        }
-    }
-
-    async getUserListing() {
-        try {
-            const response = await this.api.get('user/get-user-listing');
-            return response.data;
-        } catch (error) {
-            throw error
-        }
-    }
 }
 
 const AuthService = new Auth();

@@ -1,10 +1,10 @@
-import React, { useRef } from 'react'
-import jsPDF from 'jspdf';
+import { Button, Hidden } from '@mui/material';
 import html2canvas from 'html2canvas';
-import './style.css'
-import { Button } from '@mui/material';
-import charusat from '../../../public/assets/charusat_logo.jpg'
-import cspit from '../../../public/assets/cspit_logo.jpg'
+import jsPDF from 'jspdf';
+import { useRef } from 'react';
+import charusat from '../../../public/assets/charusat_logo.jpg';
+import cspit from '../../../public/assets/cspit_logo.jpg';
+import './style.css';
 
 function Certificate(
   {
@@ -37,18 +37,17 @@ function Certificate(
   };
 
 
-  console.log(applicationApprove);
   // const localApplicationDate = applicationApprove;
   const localApplicationDate = applicationApprove.split('T')[0].split('-').reverse().join('-');;
   const staringDate = internship_ending_date.split('T')[0].split('-').reverse().join('-');;
   const endingDate = internship_staring_date.split('T')[0].split('-').reverse().join('-');;
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'right', margin: "10px" }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: "10px" }}>
         <Button variant='contained' color='primary' onClick={generatePdf}>Download</Button>
       </div>
 
-      <div className="certificate" ref={certificateRef}>
+      <div className="certificate" ref={certificateRef} >
         <div className="college_header_data">
           <div className="college_logo">
             <img src={charusat} alt="Charusat Logo" />

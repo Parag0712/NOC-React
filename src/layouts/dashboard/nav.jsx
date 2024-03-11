@@ -8,6 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import { alpha } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import ListItemButton from '@mui/material/ListItemButton';
+import { CgProfile } from "react-icons/cg";
 
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
@@ -41,12 +42,19 @@ export default function Nav({ openNav, onCloseNav }) {
   }, [pathname]);
 
 
+  console.log(currentUser);
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
-      {/* {navConfig.map((item) => (
-        
-        <NavItem key={item.title} item={item} />
-      ))} */}
+   
+
+      <NavItem
+        key="Application"
+        item={{
+          title: "Application",
+          path: "/",
+          icon: <IoHome fontSize={"22px"} />
+        }}
+      />
 
 
 
@@ -57,14 +65,14 @@ export default function Nav({ openNav, onCloseNav }) {
 
       ))}
 
-        <NavItem
-          key="Application"
-          item={{
-            title: "Application",
-            path: "/",
-            icon: <IoHome fontSize={"22px"} />
-          }}
-        />
+      <NavItem
+        key="Application"
+        item={{
+          title: "User",
+          path: "/users",
+          icon: <CgProfile fontSize={"22px"} />
+        }}
+      />
 
     </Stack>
   );

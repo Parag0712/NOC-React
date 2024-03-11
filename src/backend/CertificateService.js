@@ -31,7 +31,7 @@ class Certificate {
                     college_branch,
                     internship_ending_date,
                     internship_starting_date,
-                    certificate_status:"pending"
+                    certificate_status: "pending"
                 },
                 {
                     headers: {
@@ -54,12 +54,12 @@ class Certificate {
 
 
     // Update Certificate
-    async updateCertificate(status,id,token) {
+    async updateCertificate(status, id, token) {
         try {
             const response = await this.api.patch(
                 `certificate/updateStateCertificate/${id}`,
                 {
-                    certificate_status:status
+                    certificate_status: status
                 },
                 {
                     headers: {
@@ -80,7 +80,7 @@ class Certificate {
     }
 
     // getAllCertificate
-    async getAllCertificate(token){
+    async getAllCertificate(token) {
         try {
             const response = await this.api.get('certificate/getAllCertificate', {
                 headers: {
@@ -98,7 +98,7 @@ class Certificate {
     }
 
     //getUserCertificate
-    async getUserCertificate(token){
+    async getUserCertificate(token) {
         try {
             const response = await this.api.get('certificate/getUserCertificate', {
                 headers: {

@@ -6,7 +6,9 @@ import Protected from './components/protected';
 import ChangePasswordPage from 'src/pages/changePassword';
 import AdminProtected from './components/adminProtected';
 import DashboardLayout from 'src/layouts/dashboard';
+import RootAdminProtected from './components/RootAdminProtected';
 
+export const RootAdmin = lazy(() => import('src/pages/RootAdmin'));
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const RegisterPage = lazy(() => import('src/pages/register'));
 export const BlogPage = lazy(() => import('src/pages/UpdateProfile'));
@@ -46,6 +48,7 @@ export default function Router() {
         },
         { path: 'RejectCertificate', element: <AdminProtected><RejectCertificatePage /></AdminProtected> },
         { path: 'ApproveCertificate', element:<AdminProtected> <ApproveCertificatePage /></AdminProtected> },
+        { path: 'users', element:<RootAdminProtected> <RootAdmin /></RootAdminProtected> },
         { path: 'mycertificate', element: <MyCertificatePage /> },
         { path: 'profile', element: <BlogPage /> },
         { path: 'ChangePassword', element: <ChangePasswordPage /> },
@@ -58,7 +61,6 @@ export default function Router() {
           <LoginPage />
         </Protected>,
     },
-
     {
       path: 'register',
       element:

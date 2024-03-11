@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import { clearUser, removeToken, signOutUserSuccess } from 'src/redux/User/userSlice';
 import { clearCertificate } from 'src/redux/User/certificateSlice';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -33,12 +34,14 @@ export default function Header({ onOpenNav }) {
   const handleCloseMenu = () => {
     setOpen(null);
   };
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { token ,currentUser} = useSelector((state) => state.user);
   const accesstoken = currentUser?.accessToken;
   const handleLogout = () => {
     AuthService.logout(accesstoken)
       .then((data) => {
+        navigate("/login");
         dispatch(signOutUserSuccess());
         dispatch(removeToken());
         dispatch(clearUser())
