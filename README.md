@@ -1,44 +1,42 @@
-## Minimal [(Free version)](https://minimal-kit-react.vercel.app/)
+# NOC-React
 
-> Noc Certificate Generator .
+## Overview
 
-![preview](public/assets/preview.png)
+This project is a React frontend application for managing NOC (No Objection Certificate) generation.
 
-## Demo
+## Features
 
-- [Dashboard Page](https://minimal-kit-react.vercel.app/)
-- [Users Page](https://minimal-kit-react.vercel.app/user)
-- [Products Page](https://minimal-kit-react.vercel.app/products)
-- [Blog Page](https://minimal-kit-react.vercel.app/blog)
-- [Login Page](https://minimal-kit-react.vercel.app/login)
-- [Not Found Page](https://minimal-kit-react.vercel.app/404)
+- User authentication and authorization.
+- Registration and login functionality.
+- Form handling with react-hook-form.
+- Integration with backend API for data fetching and submission.
+- UI components using Material-UI and Emotion.
+- PDF generation for certificates using react-pdf/renderer and pdfmake.
+- State management with Redux Toolkit and react-redux.
+- Data visualization with ApexCharts.
+- File handling with file-saver and html2canvas for exporting certificates.
+- Responsive design with SimpleBar React for scrollbars.
 
-## Quick start
+## Tech Stack
 
-- [Download from Github](https://github.com/minimal-ui-kit/material-kit-react/archive/refs/heads/main.zip) or clone the repo : `git clone https://github.com/minimal-ui-kit/material-kit-react.git`
-- Recommended `Node.js v18.x`.
-- **Install:** `yarn install`
-- **Start:** `yarn dev`
-- **Build:** `yarn build`
+- React
+- Redux Toolkit
+- React Router DOM
+- Material-UI
+- Emotion
+- Axios
+- react-hook-form
+- react-pdf/renderer
+- pdfmake
+- ApexCharts
+- HTML2Canvas
+- FileSaver.js
+- Other dependencies as listed in package.json
 
-## Upgrade to PRO Version
+## Installation
 
-| Minimal Free     | [Minimal Pro](https://material-ui.com/store/items/minimal-dashboard/) |
-| :--------------- | :-------------------------------------------------------------------- |
-| **6** Demo Pages | **70+** Demo Pages                                                    |
-| -                | Authentication with **Amplify**, **Auth0**, **JWT** and **Firebase**  |
-| -                | [+More components](https://minimals.cc/components)                    |
-| -                | Dark & light mode                                                     |
-| -                | Next.js version                                                       |
-| -                | TypeScript version (Standard Plus and Extended license)               |
-| -                | Design Figma File (Standard Plus and Extended license)                |
-| -                | Complete Users Flows                                                  |
-| -                | Learn more: [Package & License](https://docs.minimals.cc/package)     |
+1. Clone the repository:
 
-## License
-
-Distributed under the MIT License. See [LICENSE](https://github.com/minimal-ui-kit/minimal.free/blob/main/LICENSE.md) for more information.
-
-## Contact us
-
-Email: support@minimals.cc
+   ```bash
+   git clone https://github.com/Parag0712/NOC-React.git
+   cd NOC-React
