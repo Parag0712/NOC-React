@@ -1,17 +1,16 @@
 /* eslint-disable perfectionist/sort-imports */
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'src/global.css';
-
 
 import Router from 'src/routes/sections';
 import ThemeProvider from 'src/theme';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
-import AuthService from './backend/AuthService';
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken, signInFailure, signInStart, signInSuccess, signOutUserSuccess } from './redux/User/userSlice';
-import { addCertificate, addCertificates } from './redux/User/certificateSlice';
+import AuthService from './backend/AuthService';
+import { setToken, signInSuccess, signOutUserSuccess } from './redux/User/userSlice';
+import { addCertificates } from './redux/User/certificateSlice';
 import CertificateService from './backend/CertificateService';
 // ----------------------------------------------------------------------
 
@@ -21,42 +20,39 @@ export default function App() {
   const user = useSelector((state) => state.user);
 
   const token = user?.currentUser?.accessToken;
-  const refreshToken = user?.currentUser?.refreshToken;
 
   // State variable to track if user data has been fetched
   const [userDataFetched, setUserDataFetched] = useState(false);
-  const [certificate, setCertificate] = useState([]);
 
   useEffect(() => {
     if (token && !userDataFetched) {
       AuthService.getAuthUser(token)
-        .then((val) => {
-          const refreshToken = val.data.tokens.refreshToken;
-          const accessToken = val.data.tokens.accessToken;
+        .then((response) => {
+          const { refreshToken, accessToken } = response.data.tokens;
           dispatch(setToken({ accessToken, refreshToken }));
-          const userData = { ...val.data.user, refreshToken, accessToken };
-          const certificates = userData.certificateIssue
-          if (userData.isAdmin == true) {
+          const userData = { ...response.data.user, refreshToken, accessToken };
+          
+          if (userData.isAdmin === true) {
             CertificateService.getAllCertificate()
-              .then((val) => {
-                const certificates = val.data.certificate
-                dispatch(addCertificates(certificates));
-              }).catch((error) => {
-                console.log(error);
+              .then((certResponse) => {
+                dispatch(addCertificates(certResponse.data.certificate));
               })
+              .catch((error) => {
+                console.error(error);
+              });
           }
 
           dispatch(signInSuccess(userData));
           setUserDataFetched(true); // Mark user data as fetched
         })
         .catch((error) => {
-          if(error.response.data.message == "Invalid Access Token"){
+          if (error.response?.data?.message === "Invalid Access Token") {
             dispatch(signOutUserSuccess());
           }
-          console.log(error);
+          console.error(error);
         });
-    } 
-  }, [token, userDataFetched]);
+    }
+  }, [token, userDataFetched, dispatch]);
 
   return (
     <ThemeProvider>

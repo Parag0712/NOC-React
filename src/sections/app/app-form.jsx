@@ -16,16 +16,27 @@ import CertificateService from 'src/backend/CertificateService';
 import { addCertificate, clearCertificate, updatePendingState } from 'src/redux/User/certificateSlice';
 import { clearUser } from 'src/redux/User/userSlice';
 
-export default function appForm({ reject, approve, statePending }) {
-
-
+export default function AppForm({ reject, approve, statePending }) {
     const { register, handleSubmit, control, watch, formState: { errors } } = useForm();
     const [loading, setLoading] = useState(false);
-    const { token } = useSelector((state) => state.user);
+    const { token,currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
-    // Handle Certificate
+    const colleges = [
+        { name: "CSPIT", branch: ["CE", "IT"] },
+        { name: "DESTAR", branch: ["CSE", "CE", "IT"] }
+    ];
 
+    const [branchOptions, setBranchOptions] = useState([]);
+    const selectedCollegeName = watch('college_name');
+
+    // Watch for changes in the "college_name" field
+    useEffect(() => {
+        const selectedCollege = colleges.find(college => college.name === selectedCollegeName);
+        if (selectedCollege) {
+            setBranchOptions(selectedCollege.branch);
+        }
+    }, [selectedCollegeName, colleges]);
 
     const handleCertificate = (data) => {
         setLoading(true);
@@ -38,41 +49,29 @@ export default function appForm({ reject, approve, statePending }) {
         const tokens = token.accessToken;
         CertificateService.createCertificateReq(data, startingDate, endingDate, tokens, "pending")
             .then((value) => {
-                // value.data.certificate
-                const certificate = value.data.certificate
+                const certificate = value.data.certificate;
                 dispatch(addCertificate(certificate));
                 dispatch(updatePendingState());
                 toast.success(value.message);
             }).catch((error) => {
                 console.log(error);
             }).finally(() => {
-                setLoading(false)
-            })
-    }
+                setLoading(false);
+            });
+    };
 
-    const colleges = [
-        { name: "CSPIT", branch: ["CE", "IT"] },
-        { name: "DESTAR", branch: ["CSE", "CE", "IT"] }
-    ];
-
-    const [branchOptions, setBranchOptions] = useState([]);
-    // Watch for changes in the "college_name" field
-    useEffect(() => {
-        const selectedCollege = colleges.find(college => college.name === watch('college_name'));
-        const branches = selectedCollege ? setBranchOptions(selectedCollege?.branch) : "";
-    }, [watch('college_name')]);
     return (
         <Container maxWidth="xl">
-
-            {reject &&
-                <Typography variant="h6" color={"error"}>your application rejected You can resubmit</Typography>
-            }
+            {(reject && !currentUser?.isAdmin ) && (
+                <Typography variant="h6" color="error">
+                    Your application was rejected. You can resubmit.
+                </Typography>
+            )}
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-                <Typography variant="h4" > Application Form</Typography>
+                <Typography variant="h4">Application Form</Typography>
             </Stack>
 
             <form onSubmit={handleSubmit(handleCertificate)}>
-
                 <Grid container spacing={3}>
                     <Grid item xs={10} md={10} lg={11} sx={{ margin: "auto" }}>
                         <Stack spacing={{ xs: 0, lg: 3 }} sx={{ gap: "20px" }} direction={{ xs: 'column', lg: 'colum' }}>
@@ -130,7 +129,7 @@ export default function appForm({ reject, approve, statePending }) {
                                     {...register("student_phoneNo", {
                                         required: '*Student Number is required',
                                         pattern: {
-                                            value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+                                            value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
                                             message: '*Student Number must be at least 10 characters long'
                                         }
                                     })}
@@ -430,7 +429,7 @@ export default function appForm({ reject, approve, statePending }) {
                                     {...register("hr_phoneNo", {
                                         required: '*Hr Phone is required',
                                         pattern: {
-                                            value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+                                            value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
                                             message: '*Hr Phone must be at least 10 characters long'
                                         }
                                     })}

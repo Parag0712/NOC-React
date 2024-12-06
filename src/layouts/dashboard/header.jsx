@@ -39,6 +39,7 @@ export default function Header({ onOpenNav }) {
   const { token ,currentUser} = useSelector((state) => state.user);
   const accesstoken = currentUser?.accessToken;
   const handleLogout = () => {
+    navigate("/login");
     AuthService.logout(accesstoken)
       .then((data) => {
         navigate("/login");

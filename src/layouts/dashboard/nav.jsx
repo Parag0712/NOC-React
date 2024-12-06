@@ -65,15 +65,17 @@ export default function Nav({ openNav, onCloseNav }) {
 
       ))}
 
-      <NavItem
-        key="Application"
-        item={{
-          title: "User",
-          path: "/users",
-          icon: <CgProfile fontSize={"22px"} />
-        }}
-      />
-
+      {/* {
+         <NavItem
+         key="Application"
+         item={{
+           title: "User",
+           path: "/users",
+           icon: <CgProfile fontSize={"22px"} />
+         }}
+       />
+ 
+      } */}
     </Stack>
   );
 

@@ -21,37 +21,57 @@ import AuthService from 'src/backend/AuthService';
 import { toast } from 'react-toastify';
 import { useRouter } from 'src/routes/hooks';
 import { addCertificates } from 'src/redux/User/certificateSlice';
-import { setToken, signInSuccess } from 'src/redux/User/userSlice';
+import { setToken, signInStart, signInSuccess, signInFailure } from 'src/redux/User/userSlice';
 
 export default function RegisterView() {
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
-
-
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   // Handler Register
   const handleRegister = (data) => {
+    dispatch(signInStart());
+    setLoading(true);
     AuthService.createAccount(data)
-      .then((val) => {
-        const accessToken = val.data.tokens.accessToken;
+      .then((registerResponse) => {
+        const { accessToken } = registerResponse.data.tokens;
+        
         AuthService.getAuthUser(accessToken)
-          .then((val) => {
-            const refreshToken = val.data.tokens.refreshToken;
-            const accessToken = val.data.tokens.accessToken;
-            dispatch(setToken({ accessToken, refreshToken }));
-            const userData = { ...val.data.user, refreshToken, accessToken };
-            const certificates = userData.certificateIssue
-            dispatch(addCertificates(certificates))
+          .then((userResponse) => {
+            const { refreshToken, accessToken: newAccessToken } = userResponse.data.tokens;
+            
+            dispatch(setToken({ 
+              accessToken: newAccessToken, 
+              refreshToken 
+            }));
+
+            const userData = { 
+              ...userResponse.data.user, 
+              refreshToken,
+              accessToken: newAccessToken 
+            };
+
+            dispatch(addCertificates(userData.certificateIssue));
             dispatch(signInSuccess(userData));
+            
             router.push('/');
-            toast.success(val.message);
+            toast.success(userResponse.message);
           })
-      }).catch((error) => {
-        toast.error(error);
+          .catch((error) => {
+            toast.error(error);
+            dispatch(signInFailure());
+          });
       })
+      .catch((error) => {
+        toast.error(error);
+        dispatch(signInFailure());
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -82,7 +102,7 @@ export default function RegisterView() {
                   name="firstName"
                   fullWidth
                   label="First Name"
-                  error={errors.firstName}
+                  error={!!errors.firstName}
                   helperText={
                     <motion.div
                       style={{
@@ -96,10 +116,10 @@ export default function RegisterView() {
                     </motion.div>
                   }
                   {...register("firstName", {
-                    required: "First name is required",
+                    required: "*First name is required",
                     pattern: {
                       value: /^[a-zA-Z\s]*$/,
-                      message: "Enter a valid first name"
+                      message: "*Enter a valid first name"
                     }
                   })}
                 />
@@ -108,7 +128,7 @@ export default function RegisterView() {
                   name="lastName"
                   fullWidth
                   label="Last Name"
-                  error={errors.lastName}
+                  error={!!errors.lastName}
                   helperText={
                     <motion.div
                       style={{
@@ -122,10 +142,10 @@ export default function RegisterView() {
                     </motion.div>
                   }
                   {...register("lastName", {
-                    required: "Last name is required",
+                    required: "*Last name is required",
                     pattern: {
                       value: /^[a-zA-Z\s]*$/,
-                      message: "Enter a valid last name"
+                      message: "*Enter a valid last name"
                     }
                   })}
                 />
@@ -134,7 +154,7 @@ export default function RegisterView() {
               <TextField
                 name="email"
                 label="Email address"
-                error={errors.email}
+                error={!!errors.email}
                 helperText={
                   <motion.div
                     style={{
@@ -148,10 +168,10 @@ export default function RegisterView() {
                   </motion.div>
                 }
                 {...register("email", {
-                  required: "Email is required",
+                  required: "*Email is required",
                   pattern: {
                     value: /^[a-zA-Z0-9._%+-]+@(charusat\.edu\.in|charusat\.ac\.in)$/,
-                    message: "(e.g. id@charusat.edu.in, id@charusat.ac.in)"
+                    message: "*Valid Email. ex. [@charusat.edu.in, @charusat.ac.in]"
                   }
                 })}
               />
@@ -160,7 +180,7 @@ export default function RegisterView() {
                 name="password"
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
-                error={errors.password}
+                error={!!errors.password}
                 helperText={
                   <motion.div
                     style={{
@@ -183,10 +203,10 @@ export default function RegisterView() {
                   ),
                 }}
                 {...register("password", {
-                  required: "Password is required",
+                  required: "*Password is required",
                   minLength: {
                     value: 6,
-                    message: "Password must be at least 6 characters long"
+                    message: "*Password must be at least 6 characters long"
                   }
                 })}
               />
@@ -200,7 +220,7 @@ export default function RegisterView() {
               variant="contained"
               color="inherit"
             >
-              Register
+              {loading ? "Loading..." : "Register"}
             </LoadingButton>
           </form>
         </Card>
